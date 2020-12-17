@@ -2,7 +2,7 @@ using System;
 
 namespace RpsGame_NoDb
 {
-    class Player
+    class Player 
     {
         private Guid playerId = new Guid();
         public Guid PlayerId
