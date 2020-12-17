@@ -4,110 +4,72 @@ namespace RpsGame_NoDb
 {
     class Program
     {
+        // public enum Choice
+        // {
+        //     Rock,
+        //     Paper,
+        //     Scissors
+        // }
+
         static void Main(string[] args)
         {
-            
-//Versoin 1
-            //Console.WriteLine(userResponse);
-          /*   int userChoice;
-             bool userResponseParsed;
+            Console.WriteLine("This is The Official Batch Rock-Paper-Scissors Game");
+            // Console.WriteLine(userResponse);
+            // try
+            // {
+            //     int userResponseInt = int.Parse(userResponse);
+            // }
+            // catch (FormatException ex)
+            // {
+            //     // throw new FormatException("There was a problem with parsing the user input", ex);
+            // }
+            int userChoice; // declare these two variables to be used int he do/while loop
+            bool userResponseParsed;
             do
             {
-                Console.WriteLine("Please Choose Rock, Paper, or scissors by typing 1, 2, 3 and hitting Enter.");
-                Console.WriteLine("\t1. Rock\n\t2. Paper\n\t3. Scissors");
-                string userResponse = Console.ReadLine(); //Takes in users input
-            
-              
-                userResponseParsed = int.TryParse(userResponse, out userChoice);
+                Console.WriteLine("Please choose Rock, Paper, or Scissors by typing 1, 2, or 3 and hitting enter.");
+                Console.WriteLine("\t1. Rock \n\t2. Paper \n\t3. Scissors");
+                // Console.WriteLine("2. Paper");
+                // Console.WriteLine("3. Scissors");
 
-                if(userResponseParsed == false || (userChoice > 3 || userChoice < 1))
+                string userResponse = Console.ReadLine();   // read the users unput
+
+                userResponseParsed = int.TryParse(userResponse, out userChoice);    // parse the users input to am int
+
+                if (userResponseParsed == false || (userChoice > 3 || userChoice < 1))  // give a message if the users unput was invalid
                 {
                     Console.WriteLine("Your response is invalid.");
                 }
 
+            } while (userResponseParsed == false || userChoice > 3 || userChoice < 1);  // state conditions for if we will repeat the loop
 
-            } while(userResponseParsed == false || userChoice > 3 || userChoice < 1);
-            
-            Console.WriteLine($"You chose a number. It is a {userChoice}.");
+            // Console.WriteLine($"Congrats you entered a correct number. It is {userChoice}.");
+            Console.WriteLine("Starting the game...");
 
-            Random randomNumber = new Random(10); //Creates a random number object
-            int computerChoice = randomNumber.Next(1,4); //Get a random number between 1, 2, 3
+            Random randonNumber = new Random(10); // create a randon number object
+            int computerChoice = randonNumber.Next(1, 4);   // get a randon number 1, 2, or 3.
 
-            Console.WriteLine($"The computers choice is {computerChoice}");
+            Console.WriteLine($"The computer choice is => {computerChoice}");
 
-            if(userChoice == computerChoice) //If the players tie
+            // compare the numebrs to see who won.
+            if (userChoice == computerChoice)   // is the playes tied
             {
-                Console.WriteLine("It is a tie");
+                Console.WriteLine("This game was a tie");
             }
-
-            else if((userChoice == 2 && computerChoice == 1 )|| //if the user won
-            (userChoice == 3 && computerChoice == 2) ||
-            (userChoice == 1 && computerChoice == 3))
+            else if ((userChoice == 2 && computerChoice == 1) || // if the user won
+                (userChoice == 3 && computerChoice == 2) ||
+                (userChoice == 1 && computerChoice == 3))
             {
-                Console.WriteLine("Congrats You Won!");
+                Console.WriteLine("Congrats. You (the user) WON!."); // if the computer won.
             }
-
-            else //if the computer won
+            else
             {
                 Console.WriteLine("We're sorry. The computer won.");
             }
-            */
-        // Version 2
-            Console.WriteLine("This is The Group 2 Awesome Rock-Paper-Sissors Game!\n");
-            while(true) {
-                int userSelection;
-                bool userResponseParsed;
-                int botSelection;
-                Console.WriteLine("Please choose Rock, Paper, or Scissors by typing 1, 2, or 3 Aand hiiting enter.");
-                Console.WriteLine("\t1. Rock \n\t2. Paper \n\t3. Scissors");
-                var userResponse = Console.ReadLine(); //var will make it the proper type 'string'
-                userResponseParsed = int.TryParse(userResponse, out userSelection);    // parse the users input to an int
-                if(userResponseParsed == false || userSelection > 3 || userSelection < 1) // give a message if the users input was invalid
-                {
-                    Console.WriteLine("Your response is invalid.");
-                    continue;
-                }
-                Console.WriteLine("Starting the game...");
-                Random rnd = new Random();
-                botSelection = rnd.Next(1, 4);
-                switch (userSelection)
-                {
-                    case 1:
-                        switch (botSelection)
-                        {
-                            case 1: Console.WriteLine("Tie. You chose rock. Bot chose rock."); break;
-                            case 2: Console.WriteLine("Lose. You chose rock. Bot chose paper."); break;
-                            default: Console.WriteLine("Win. You chose rock. Bot chose scissors."); break;
-                        }
-                        break;
-                    case 2:
-                        switch (botSelection)
-                        {
-                            case 1: Console.WriteLine("Win. You chose paper. Bot chose rock."); break;
-                            case 2: Console.WriteLine("Tie. You chose paper. Bot chose paper."); break;
-                            default: Console.WriteLine("Lose. You chose paper. Bot chose scissors."); break;
-                        }
-                        break;
-                    default:
-                        switch (botSelection)
-                        {
-                            case 1: Console.WriteLine("Lose. You chose scissors. Bot chose rock."); break;
-                            case 2: Console.WriteLine("Win. You chose scissors. Bot chose paper."); break;
-                            default: Console.WriteLine("Tie. You chose scissors. Bot chose scissors."); break;
-                        }
-                        break;
-                    }
-                Console.WriteLine("\nWould you like to play again?\n\tType y for Yes\n\tType n for No\n");
-                string playAgain = Console.ReadLine(); // User input and add into playAgain
-                if(playAgain == "y") {
-                    continue;
-                } else {
-                    Console.WriteLine("\nGood bye.");
-                    break;
-                }
-            }
-    
-        }
 
+
+        }
     }
-}    
+
+
+}
