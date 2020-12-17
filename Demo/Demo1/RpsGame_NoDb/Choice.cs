@@ -1,6 +1,9 @@
-public enum Choice
+namespace RpsGame_NoDb
 {
-    Rock,
-    Paper,
-    Scissors
+    public enum Choice
+    {
+        Rock,
+        Paper,
+        Scissors
+    }
 }
