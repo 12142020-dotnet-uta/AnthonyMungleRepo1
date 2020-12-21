@@ -2,7 +2,7 @@ using System;
 
 namespace RpsGame_NoDb
 {
-    /*class Player 
+    class Player 
     {
 
         public Player(){}
@@ -93,7 +93,8 @@ namespace RpsGame_NoDb
 
 
 
-    }*/
+    }
+    /*
     public class Player
     {
 
@@ -162,5 +163,5 @@ namespace RpsGame_NoDb
         }
 
 
-    }
+    }*/
 }

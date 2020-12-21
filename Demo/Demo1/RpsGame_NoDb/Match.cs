@@ -4,7 +4,7 @@ using System;
 
 namespace RpsGame_NoDb
 {
-    /*class Match
+    class Match
     {
         private Guid matchId = Guid.NewGuid();
         public Guid MatchId { get { return matchId; } }
@@ -58,7 +58,8 @@ namespace RpsGame_NoDb
             }
         }
 
-    }*/
+    }
+    /*
      public class Match
     {
         private Guid matchId = Guid.NewGuid();
@@ -114,7 +115,7 @@ namespace RpsGame_NoDb
             }
         }
 
-    }
+    }*/
 
 
 }

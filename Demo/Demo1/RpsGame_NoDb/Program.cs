@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RpsGame_NoDb
 {
-   /* class Program
+    class Program
     {
         static void Main(string[] args)
         {
@@ -119,8 +119,8 @@ namespace RpsGame_NoDb
             }
 
         }
-    }*/
-
+    }
+   /*
     class Program
     {
 
@@ -375,11 +375,11 @@ namespace RpsGame_NoDb
                 }
             }
         }
+        */
 
 
 
-
-    }
+    //}
 
 
 }

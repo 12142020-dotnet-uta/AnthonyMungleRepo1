@@ -2,7 +2,7 @@ using System;
 
 namespace RpsGame_NoDb
 {
-    /*class Round
+    class Round
     {
         private Guid roundId = Guid.NewGuid();
         public Guid RoundId { get { return roundId; } }
@@ -12,7 +12,8 @@ namespace RpsGame_NoDb
         public Player WinningPlayer { get; set; } = null;
 
 
-    }*/
+    }
+    /*
      public class Round
     {
         private Guid roundId = Guid.NewGuid();
@@ -24,5 +25,5 @@ namespace RpsGame_NoDb
         public Choice UserChoice { get; set; }
         public Player WinningPlayer { get; set; } = null;
 
-    }
+    }*/
 }
