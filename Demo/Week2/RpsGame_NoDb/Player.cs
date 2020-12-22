@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace RpsGame_NoDb
 {
@@ -11,13 +12,8 @@ namespace RpsGame_NoDb
         }
 
         private Guid playerId = Guid.NewGuid();
-        public Guid PlayerId
-        {
-            get
-            {
-                return playerId;
-            }
-        }
+        [Key]
+        public Guid PlayerId { get { return playerId; } set { playerId = value; } }
 
         private int numWins;
         private int numLosses;
