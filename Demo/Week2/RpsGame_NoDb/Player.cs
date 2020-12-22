@@ -15,8 +15,8 @@ namespace RpsGame_NoDb
         [Key]
         public Guid PlayerId { get { return playerId; } set { playerId = value; } }
 
-        private int numWins;
-        private int numLosses;
+        public int numWins {get; set;}
+        public int numLosses{get; set;}
         private string fName;
         public string Fname
         {

@@ -10,20 +10,6 @@ namespace RpsGame_NoDb
         static int numberOfChoices = Enum.GetNames(typeof(Choice)).Length;
         static void Main(string[] args)
         {
-            // List<Player> players = new List<Player>();
-            // List<Match> matches = new List<Match>();
-            // List<Round> rounds = new List<Round>();
-            // Random rand = new Random();
-            // Random randomNumber = new Random(rand.Next()); // create a random number object
-
-            // create the Computer that everyone plays against.
-            //call methos CreatePlayer() with player name.
-            // Player p1 = new Player()
-            // {
-            //     Fname = "Max",
-            //     Lname = "Headroom"
-            // };
-            // players.Add(p1);
 
             Player p1 = gameContext.CreatePlayer("Max", "HeadRoom"); // create the computer
 
@@ -60,7 +46,7 @@ namespace RpsGame_NoDb
                         Round round = gameContext.PlayRound(match, computerChoice, userChoice);
                         Console.WriteLine($"The computer choice is => {round.Player1Choice}.");
                         TellUserWhoWonTheRound(round);
-                    } while (match.MatchWinner() == null);// end the game when once a player wins 2 rounds
+                    } while (match.MatchWinner().Fname == "null");// end the game when once a player wins 2 rounds
 
                     gameContext.UpdateWinLossRecords(match);
                     gameContext.AddCompletedMatch(match);
@@ -144,8 +130,7 @@ namespace RpsGame_NoDb
             {
                 Console.WriteLine($"Welcome, {match.Player2.Fname}. Please choose Rock, Paper, or Scissors by typing 0, 1, or 2 and hitting enter.");
                 Console.WriteLine("\t0. Rock \n\t1. Paper \n\t2. Scissors");
-                // string userResponse = Console.ReadLine();// read the users unput
-                // userResponseParsed = Choice.TryParse(userResponse, out userChoice);    // parse the users input to an int
+               
                 userChoice = gameContext.ConvertStringToInt(Console.ReadLine().Trim());
                 if (userChoice > 2 || userChoice < 0)  // give a message if the users unput was invalid
                 {

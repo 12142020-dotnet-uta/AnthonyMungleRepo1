@@ -1,16 +1,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace RpsGame_NoDb
 {
     public class RpsGameRepositoryLayer
     {
-        List<Player> players = new List<Player>();
-        List<Match> matches = new List<Match>();
-        List<Round> rounds = new List<Round>();
+        //List<Player> players = new List<Player>();
+        //List<Match> matches = new List<Match>();
+        //List<Round> rounds = new List<Round>();
         int numberOfChoices = Enum.GetNames(typeof(Choice)).Length; // get a always-current number of options of Enum Choice
         Random randomNumber = new Random((int)DateTime.Now.Millisecond); // create a random number object
+        static RpsDbContext DbContext = new RpsDbContext();
+        DbSet<Player> players = DbContext.players;
+        DbSet<Match> matches = DbContext.matches;
+        DbSet<Round> rounds = DbContext.rounds;
+
 
         /// <summary>
         /// Creates a player after verifying that the player does not already exist. returns the player obj
@@ -29,6 +35,7 @@ namespace RpsGame_NoDb
                     Lname = lName
                 };
                 players.Add(p1);
+                DbContext.SaveChanges();
             }
             return p1;
         }
@@ -63,6 +70,7 @@ namespace RpsGame_NoDb
             Match match = new Match();
             match.Player1 = p1;
             match.Player2 = p2;
+            DbContext.SaveChanges();
             return match;
         }
 
@@ -74,7 +82,7 @@ namespace RpsGame_NoDb
         public bool SaveMatch(Match match)
         {
             //check if the match is already there
-            if (!matches.Exists(x => x.MatchId == match.MatchId))
+            if (!matches.Any(x => x.MatchId == match.MatchId))
             {
                 matches.Add(match);
                 return true;
@@ -105,9 +113,11 @@ namespace RpsGame_NoDb
             round.Player2Choice = userChoice;
             if (userChoice == computerChoice)   // is the playes tied
             {
+                round.WinningPlayer = CreatePlayer("TieGame", "TieGame");
                 rounds.Add(round);
                 match.Rounds.Add(round);
                 match.RoundWinner(); // send in the player who won. empty args means a tie round
+                
             }
             else if (((int)userChoice == 1 && (int)computerChoice == 0) || // if the user won
                 ((int)userChoice == 2 && (int)computerChoice == 1) ||
@@ -117,6 +127,7 @@ namespace RpsGame_NoDb
                 rounds.Add(round);
                 match.Rounds.Add(round);
                 match.RoundWinner(match.Player2);
+                
             }
             else
             {
@@ -124,7 +135,9 @@ namespace RpsGame_NoDb
                 rounds.Add(round);
                 match.Rounds.Add(round);
                 match.RoundWinner(match.Player1);
+                
             }
+            DbContext.SaveChanges();
             return round;
         }
 
@@ -135,9 +148,10 @@ namespace RpsGame_NoDb
         /// <param name="match"></param>
         public bool AddCompletedMatch(Match match)
         {
-            if (!matches.Exists(x => x.MatchId == match.MatchId))
+            if (!matches.Any(x => x.MatchId == match.MatchId))
             {
                 matches.Add(match);
+                DbContext.SaveChanges();
                 return true;
             }
             return false;
@@ -167,7 +181,7 @@ namespace RpsGame_NoDb
         /// <returns></returns>
         public List<Match> GetMatches()
         {
-            return matches;
+            return matches.ToList();
         }
 
         /// <summary>
@@ -176,7 +190,7 @@ namespace RpsGame_NoDb
         /// <returns></returns>
         public List<Player> GetPlayers()
         {
-            return players;
+            return players.ToList();
         }
 
         /// <summary>
@@ -185,7 +199,7 @@ namespace RpsGame_NoDb
         /// <returns></returns>
         public List<Round> GetRounds()
         {
-            return rounds;
+            return rounds.ToList();
         }
 
 
