@@ -1,15 +1,13 @@
 
 using System.Collections.Generic;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace RpsGame_NoDb
 {
     public class Match
     {
-        [Key]
-        public Guid MatchId = Guid.NewGuid();
-        //public Guid MatchId { get { return matchId; } }
+        private Guid matchId = Guid.NewGuid();
+        public Guid MatchId { get { return matchId; } }
 
         public Player Player1 { get; set; } // always the computer
         public Player Player2 { get; set; } // always the user.
