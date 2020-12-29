@@ -17,7 +17,7 @@ namespace Project0
         DbSet<Location> LocationsSet = DbContext.Locations;
         DbSet<Inventory> InventoriesSet = DbContext.Inventories;
         DbSet<Cart> CartSet = DbContext.Carts;
-
+        DbSet<Order> OrderSet = DbContext.Orders;
         // public Handler(ProjectDbContext context)
         // {
         //     Handler.DbContext = context;
@@ -189,7 +189,7 @@ namespace Project0
             counter ++;
           }
           Console.WriteLine($"\n{counter}: --Place Order--");
-          Console.WriteLine($"{counter+1}: ----Exit---- \n\tYour cart will stay if you dont log out\n");
+          Console.WriteLine($"{counter+1}: ----Exit---- \n\tYour cart will stay if you Leave\n");
 
         ChooseInventory(LocationInventory, user, local);
       
@@ -223,27 +223,42 @@ namespace Project0
 /// <param name="local"></param>
       public void ChooseInventory( List<Inventory> InventoryList, Customer user, Location local)
       {
+        int exitNumber = -5;
+        int cycle = -1;
         int count = 1;
         int userInput = 0;
         int userQuantity = 0;
-        int Exit = 0;
-        int PlaceOrder = 0;
+        int Exit = InventoryList.Count + 2;
+        int PlaceOrder = InventoryList.Count + 1;
         Product currentProduct = new Product();
 
         do
         {   
               
-          if(!InventoryList.Any())
-          {Console.WriteLine("ALERT--------Sorry this store is out of Inventory----"); break;}  
+          if(!InventoryList.Any() && cycle == -1)
+          {Console.WriteLine("\nALERT--------Sorry this store is out of Inventory----"); break;}  //If a store has ran out of Inventory
 
           do
           {
-            userInput = WasUserChoiceInt(Console.ReadLine());
+            userInput = WasUserChoiceInt(Console.ReadLine()); //Changes the user to -1 if the user inputs a non int
             if(userInput == -1)
             {
               Console.WriteLine("Please choose by number.");
             }
-          }while(userInput == -1);
+          }while(userInput < 1 );
+
+          if(userInput == PlaceOrder)
+          {
+            Console.WriteLine("Placing Order...\n");
+            PlaceCartInOrder(user, local);
+            userInput = exitNumber;
+          }
+          if(userInput == Exit)
+          {
+            Console.WriteLine("Exiting...\n");
+            userInput = exitNumber;
+          }
+           
 
           if(userInput < PlaceOrder && userInput > 0) //Makes user input a correct value
           {
@@ -254,40 +269,37 @@ namespace Project0
             do
             {
               userQuantity = WasUserChoiceInt(Console.ReadLine());
-              if(userQuantity == -1 || userQuantity > InventoryList[userInput-1].Quantity || userQuantity < 0  )
+              if(userQuantity < 0 || userQuantity > InventoryList[userInput-1].Quantity )
               {
                 Console.WriteLine("Please choose a number Or Make sure you have not exceeded the amount available! Zero to add Nothing");
               }
             }while(userQuantity == -1 || userQuantity > InventoryList[userInput-1].Quantity || userQuantity < 1 );
-          
-            //RemoveFromInventory(InventoryList[userInput-1].InventoryId, userQuantity);
-            //InventoryList = UpdateInventoryList(local);//Should Update List everytime to show remaining availability
-            //AddToCart(user, currentProduct, userQuantity );
+           
+            if(userQuantity > 0)
+            {
+                RemoveFromInventory(InventoryList[userInput-1].InventoryId, userQuantity);
+                InventoryList = UpdateInventoryList(local);//Should Update List everytime to show remaining availability
+                AddToCart(user, currentProduct, userQuantity );
+            }
+          }//End Of if(userInput < PlaceOrder && userInput > 0)
+             
+              Exit = InventoryList.Count + 2;
+              PlaceOrder = InventoryList.Count + 1;
+          if(userInput != exitNumber)
+          {
+            for(int i = 0; i < InventoryList.Count; i++ )
+            {
+              Console.WriteLine($"Item {count}: {InventoryList[i].Product.ProductName} ${InventoryList[i].Product.Price}\n\t{InventoryList[i].Product.Description} {InventoryList[i].Quantity} Left.");
+              count ++;
+            }
+
+            Console.WriteLine($"\n{PlaceOrder}: --Place Order--");
+            Console.WriteLine($"{Exit}: ----Exit---- \n\tYour cart will stay if you leave");
+            count = 1;
+            cycle = 1;
           }
 
-          for(int i = 0; i < InventoryList.Count; i++ )
-          {
-            Console.WriteLine($"Item {count}: {InventoryList[i].Product.ProductName} ${InventoryList[i].Product.Price}\n\t{InventoryList[i].Product.Description} {InventoryList[i].Quantity} Left.");
-            count ++;
-          }
-
-          Exit = InventoryList.Count + 2;
-          PlaceOrder = InventoryList.Count + 1; 
-          Console.WriteLine($"\n{PlaceOrder}: --Place Order--");
-          Console.WriteLine($"{Exit}: ----Exit---- \n\tYour cart will stay if you dont log out");
-          count = 1;
-          
-          if(userInput == PlaceOrder)
-          {
-            Console.WriteLine("Placing Order...\n");
-            PlaceCartInOrder(user);
-          }
-          if(userInput == Exit)
-          {
-            Console.WriteLine("Exiting...\n");
-          }
-
-      }while(userInput != Exit && userInput != PlaceOrder);
+      }while(userInput != exitNumber); //End of 1st do loop
       
     }
     
@@ -301,22 +313,40 @@ namespace Project0
       public void AddToCart (Customer customerId, Product addThisProduct, int amount)
       {
 
-        Cart currentCart = new Cart();
-        currentCart.Owner = customerId;
-        currentCart.Product = addThisProduct;
-        currentCart.amount = amount;
-        CartSet.Add(currentCart);
-        DbContext.SaveChanges();
+        if(addThisProduct != null)
+        {
+          Cart currentCart = new Cart();
+          currentCart.Owner = customerId;
+          currentCart.Product = addThisProduct;
+          currentCart.amount = amount;
+          CartSet.Add(currentCart);
+          DbContext.SaveChanges();
+          
+          Console.WriteLine("Item Added To Cart");
+        }
         
-        Console.WriteLine("Item Added To Cart");
       }
 
-      public void PlaceCartInOrder(Customer user)
+      public void PlaceCartInOrder(Customer user, Location local)
       {
-        Cart cartToBeDestroyed = new Cart();
-        cartToBeDestroyed = CartSet.Where(x => x.Owner == user).FirstOrDefault();
-        
-
+       
+        foreach(Cart Karts in CartSet)
+        {
+          if(Karts.Owner.CustomerId == user.CustomerId)
+          {
+            Order Order = new Order();
+            //cartToBeDestroyed.Add(Karts);
+            Order.Customer = user; 
+            Order.Location = local;
+            Order.ProductName = Karts.Product.ProductName;
+            Order.Amount = Karts.amount;
+            Order.Price = (Karts.amount * Karts.Product.Price);
+            CartSet.Remove(Karts);
+            OrderSet.Add(Order);
+          }
+        }
+        DbContext.SaveChanges();
+        Console.WriteLine("Finished your Order\n");
 
       }
 
@@ -369,7 +399,6 @@ namespace Project0
                 Console.WriteLine("Invalid response");
                 return -1; 
             }
-            Console.WriteLine(result);
             return result;
 
         }

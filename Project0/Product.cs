@@ -6,7 +6,6 @@ namespace Project0
 {
     public class Product
     {
-
         [Key]
         public string ProductName { get; set;}
         public double Price { get; set; }
