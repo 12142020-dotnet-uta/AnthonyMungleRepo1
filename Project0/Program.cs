@@ -10,6 +10,7 @@ namespace Project0
             int userOption = 0; //Used to navigate the menu
             Handler Handler = new Handler(); // used to Handle and check user input
             Customer currentUser = new Customer();
+            currentUser = null;
 
             while(userOption != 4)
             {
@@ -38,8 +39,8 @@ namespace Project0
                     }  
                 }
 
-                if(currentUser.Uname != null && userOption == 3) //Insures the user has Logged in and there is a Customer Value
-                {
+                if(userOption == 3 && currentUser != null) //Insures the user has Logged in and there is a Customer Value
+                { 
                     userOption = LocaionOrOrderViewMenu(currentUser);
 
                     if(userOption == 1) //Location Choosing service and Shopping
@@ -78,14 +79,39 @@ namespace Project0
 
                     if(userOption == 2)//Order service
                     {
-                        
+                        int userOrderMenuChoice = 0;
+                        do
+                        {
+                            userOrderMenuChoice = OrderService();
+
+                            if(userOrderMenuChoice == 1)
+                            {
+                                Handler.PrintCurrentUserOrderHistory(currentUser);
+                            }
+
+                            if(userOrderMenuChoice == 2)
+                            {
+                                Handler.PrintCurrentUsersCart(currentUser);
+                            }
+
+                            if(userOrderMenuChoice == 3)
+                            {
+
+                            }
+
+                            if(userOrderMenuChoice == 3)
+                            {
+
+                            }
+
+                        }while(userOrderMenuChoice != 5);
                         //press number to exit
                     }
                     if(userOption == 3){ userOption = 0; break;}
 
                 }//End of If(User != null)
 
-                else if(userOption == 3 && currentUser.Uname == null)
+                else if(userOption == 3 && currentUser == null)
                 {
                     Console.WriteLine("\nYou must be logged in to continue");
                 }
@@ -110,7 +136,7 @@ namespace Project0
                     userOption = WasUserChoiceInt(Console.ReadLine());
                     if(userOption > 4 || userOption < 1)
                     {
-                        Console.WriteLine("Please use a Valid option");
+                        Console.WriteLine("Please use a Valid option\n");
                     }
 
                 } while(userOption != 1 && userOption != 2 && userOption != 3 && userOption != 4);
@@ -129,7 +155,7 @@ namespace Project0
             bool realChoice = int.TryParse(userChoice, out result);
             if(realChoice == false)
             {
-                Console.WriteLine("Invalid response");
+                Console.WriteLine("\nInvalid response");
                 return -1; 
             }
             return result;
@@ -154,12 +180,35 @@ namespace Project0
                     userOption = WasUserChoiceInt(Console.ReadLine());
                     if(userOption > 3 || userOption < 1)
                     {
-                        Console.WriteLine("Please use a Valid option");
+                        Console.WriteLine("Please use a Valid option\n");
                     }
 
                 } while(userOption != 1 && userOption != 2 && userOption != 3);
 
             return userOption;
+        }
+
+        /// <summary>
+        /// Handles the menu and choices for retreiving orders and customer data
+        /// </summary>
+        /// <param name="handles"></param>
+        /// <returns></returns>
+        public static int OrderService()
+        {
+          int userOption = 0;
+            do
+                {
+                    Console.WriteLine("What would you Like to do?");
+                    Console.WriteLine("\n1: View current user Order History\n2: View current user Cart\n3: Place Order \n4: View Customers \n5: ---Exit---");
+                    userOption = WasUserChoiceInt(Console.ReadLine());
+                    if(userOption > 5 || userOption < 1)
+                    {
+                        Console.WriteLine("\nPlease use a Valid option");
+                    }
+
+                } while(userOption != 1 && userOption > 5);
+            return userOption;
+
         }
         
     }

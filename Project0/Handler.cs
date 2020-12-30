@@ -24,6 +24,10 @@ namespace Project0
         // }
         
         
+        /// <summary>
+        /// Creates a new uniqe Customer in the database
+        /// </summary>
+        /// <returns></returns>
        public Customer createCustomer()
        {
            string fname = "";
@@ -159,7 +163,7 @@ namespace Project0
     /// <summary>
     /// Takes in a userChoice INT and a LIST(INT) compares them to each and then selects that matching ID from 
     /// the connected database. Compares the FKey to a list of Products available then prints out the names and prices 
-    /// of the matching products
+    /// of the matching products then calls the shoppingMenu
     /// </summary>
     /// <param name="userChosenSpace"></param>
     /// <param name="LocationIdList"></param>
@@ -196,11 +200,11 @@ namespace Project0
       }
 
 /// <summary>
-/// 
+/// updates the inventory list when an item is subtracted from it
 /// </summary>
 /// <param name="location"></param>
 /// <returns></returns>
-      public List<Inventory> UpdateInventoryList(/*List<Inventory> LocationInventory*/ Location location)
+      public List<Inventory> UpdateInventoryList( Location location)
       {
 
         List<Inventory> LocationInventory = new List<Inventory>();
@@ -216,7 +220,9 @@ namespace Project0
 
 
 /// <summary>
-/// 
+///  The main shopping menu. Suplies a changing list of current locations inventory
+/// when the items are placed into the cart the list gets subtracted from and the user has less
+/// options to choose from. Tells the user when the location is out of inventory
 /// </summary>
 /// <param name="InventoryList"></param>
 /// <param name="user"></param>
@@ -305,7 +311,8 @@ namespace Project0
     
 
       /// <summary>
-      /// 
+      /// Adds the currently selected Product and the amount to a cart object
+      /// connected to a user by the foriegn key
       /// </summary>
       /// <param name="customerId"></param>
       /// <param name="addThisProduct"></param>
@@ -322,20 +329,24 @@ namespace Project0
           CartSet.Add(currentCart);
           DbContext.SaveChanges();
           
-          Console.WriteLine("Item Added To Cart");
+          Console.WriteLine("-----Item Added To Cart------");
         }
         
       }
 
+      /// <summary>
+      /// Compares the users ID with the Dbset Id. Any matching Id's are placed into an order object 
+      /// then sent to the database
+      /// </summary>
+      /// <param name="user"></param>
+      /// <param name="local"></param>
       public void PlaceCartInOrder(Customer user, Location local)
       {
-       
         foreach(Cart Karts in CartSet)
         {
           if(Karts.Owner.CustomerId == user.CustomerId)
           {
             Order Order = new Order();
-            //cartToBeDestroyed.Add(Karts);
             Order.Customer = user; 
             Order.Location = local;
             Order.ProductName = Karts.Product.ProductName;
@@ -352,6 +363,7 @@ namespace Project0
 
       /// <summary>
       /// Removes the selected quantity from an inventory item using the PK from the database 
+      /// saves the changes
       /// </summary>
       /// <param name="inventoryId"></param>
       /// <param name="productRemoved"></param>
@@ -402,6 +414,59 @@ namespace Project0
             return result;
 
         }
+
+        /// <summary>
+        /// Prints the Order History of the user given. Says when there is none to print
+        /// </summary>
+        /// <param name="user"></param>
+        public void PrintCurrentUserOrderHistory(Customer user)
+        {
+          int cycle = -1;
+          Console.WriteLine($"\nUser {user.Uname}");
+
+          List<Location> NothingValue = LocationsSet.ToList();
+          foreach(Order orders in OrderSet)
+          {
+            if(orders.Customer.CustomerId == user.CustomerId)
+            {
+              cycle = 1;
+              Console.WriteLine($"\nID:{orders.OrderId} Location:{orders.Location.LocationName} Item:{orders.ProductName} Amount:{orders.Amount} Price: ${orders.Price}");
+            }
+          }
+
+          if(cycle == -1)
+          {
+            Console.WriteLine($"No Order History for {user.Uname}\n");
+          }
+        }
+
+
+        /// <summary>
+        /// Prints the current cart of the user given. Says when there is none to print
+        /// </summary>
+        /// <param name="user"></param>
+        public void PrintCurrentUsersCart(Customer user)
+        {
+          int cycle = -1;
+          List<Product> NothingValue = productsSet.ToList();//I Dont Know Why but these make the thing work under Certian conditions ill figure it out
+          Console.WriteLine($"\nUser {user.Uname}");
+          foreach(Cart Karts in CartSet)
+          {
+            if(Karts.Owner.CustomerId == user.CustomerId)
+            {
+              cycle = 1;
+              Console.WriteLine($"\nID:{Karts.CartId} UserName:{Karts.Owner.Uname} Item:{Karts.Product.ProductName} Price: ${Karts.Product.Price}");
+            }
+          }
+
+          if(cycle == -1)
+          {
+            Console.WriteLine($"Cart is Empty for {user.Uname}\n");
+          }
+
+        }
+
+
 
 /// <summary>
 /// A test to make sure the database was connected and that i knew what i was doing.
