@@ -17,13 +17,17 @@ namespace Project0
         DbSet<Location> LocationsSet = DbContext.Locations;
         DbSet<Inventory> InventoriesSet = DbContext.Inventories;
         DbSet<Cart> CartSet = DbContext.Carts;
-
+        DbSet<Order> OrderSet = DbContext.Orders;
         // public Handler(ProjectDbContext context)
         // {
         //     Handler.DbContext = context;
         // }
         
         
+        /// <summary>
+        /// Creates a new uniqe Customer in the database
+        /// </summary>
+        /// <returns></returns>
        public Customer createCustomer()
        {
            string fname = "";
@@ -159,7 +163,7 @@ namespace Project0
     /// <summary>
     /// Takes in a userChoice INT and a LIST(INT) compares them to each and then selects that matching ID from 
     /// the connected database. Compares the FKey to a list of Products available then prints out the names and prices 
-    /// of the matching products
+    /// of the matching products then calls the shoppingMenu
     /// </summary>
     /// <param name="userChosenSpace"></param>
     /// <param name="LocationIdList"></param>
@@ -173,15 +177,6 @@ namespace Project0
         List<Inventory> LocationInventory = new List<Inventory>();
         LocationInventory = UpdateInventoryList(local);
         List<Product> FullProductList = productsSet.ToList();    //it likes to have this or else it will not work  
-        //  foreach(Inventory I in InventoriesSet)
-        //  {
-        //      if(I.Location == local)
-        //      {
-        //          LocationInventory.Add(I);
-        //          //Console.WriteLine($"{LocationInventory[i].Product.ProductName}");
-                
-        //      } 
-        // }
           
         for(int i = 0; i < LocationInventory.Count; i++ )
           {
@@ -189,18 +184,18 @@ namespace Project0
             counter ++;
           }
           Console.WriteLine($"\n{counter}: --Place Order--");
-          Console.WriteLine($"{counter+1}: ----Exit---- \n\tYour cart will stay if you dont log out\n");
+          Console.WriteLine($"{counter+1}: ----Exit---- \n\tYour cart will stay if you Leave\n");
 
         ChooseInventory(LocationInventory, user, local);
       
       }
 
 /// <summary>
-/// 
+/// updates the inventory list when an item is subtracted from it
 /// </summary>
 /// <param name="location"></param>
 /// <returns></returns>
-      public List<Inventory> UpdateInventoryList(/*List<Inventory> LocationInventory*/ Location location)
+      public List<Inventory> UpdateInventoryList( Location location)
       {
 
         List<Inventory> LocationInventory = new List<Inventory>();
@@ -216,34 +211,51 @@ namespace Project0
 
 
 /// <summary>
-/// 
+///  The main shopping menu. Suplies a changing list of current locations inventory
+/// when the items are placed into the cart the list gets subtracted from and the user has less
+/// options to choose from. Tells the user when the location is out of inventory
 /// </summary>
 /// <param name="InventoryList"></param>
 /// <param name="user"></param>
 /// <param name="local"></param>
       public void ChooseInventory( List<Inventory> InventoryList, Customer user, Location local)
       {
-        int count = 1;
-        int userInput = 0;
-        int userQuantity = 0;
-        int Exit = 0;
-        int PlaceOrder = 0;
-        Product currentProduct = new Product();
+        int exitNumber = -5; //The number that will exit the loop when
+        int cycle = -1; //Ensures that the Out Of inventory ALERT does not kick the user out when they orderd the last item
+        int count = 1; // Counts items for lists
+        int userInput = 0; //Wil be the user input
+        int userQuantity = 0; //Will be a different user input for quantity
+        int Exit = InventoryList.Count + 2; // Exit number for changing lists
+        int PlaceOrder = InventoryList.Count + 1; // Order number for changing lists
+        Product currentProduct = new Product(); //The product that will be ordered
 
         do
         {   
               
-          if(!InventoryList.Any())
-          {Console.WriteLine("ALERT--------Sorry this store is out of Inventory----"); break;}  
+          if(!InventoryList.Any() && cycle == -1)
+          {Console.WriteLine("\n--------ALERT--------\n-----Sorry this store is out of Inventory----"); break;}  //If a store has ran out of Inventory
 
           do
           {
-            userInput = WasUserChoiceInt(Console.ReadLine());
+            userInput = WasUserChoiceInt(Console.ReadLine()); //Changes the user to -1 if the user inputs a non int
             if(userInput == -1)
             {
               Console.WriteLine("Please choose by number.");
             }
-          }while(userInput == -1);
+          }while(userInput < 1 );
+
+          if(userInput == PlaceOrder)
+          {
+            Console.WriteLine("Placing Order...\n");
+            PlaceCartInOrder(user, local);
+            userInput = exitNumber;
+          }
+          if(userInput == Exit)
+          {
+            Console.WriteLine("Exiting...\n");
+            userInput = exitNumber;
+          }
+           
 
           if(userInput < PlaceOrder && userInput > 0) //Makes user input a correct value
           {
@@ -254,46 +266,44 @@ namespace Project0
             do
             {
               userQuantity = WasUserChoiceInt(Console.ReadLine());
-              if(userQuantity == -1 || userQuantity > InventoryList[userInput-1].Quantity || userQuantity < 0  )
+              if(userQuantity < 0 || userQuantity > InventoryList[userInput-1].Quantity )
               {
                 Console.WriteLine("Please choose a number Or Make sure you have not exceeded the amount available! Zero to add Nothing");
               }
-            }while(userQuantity == -1 || userQuantity > InventoryList[userInput-1].Quantity || userQuantity < 1 );
-          
-            //RemoveFromInventory(InventoryList[userInput-1].InventoryId, userQuantity);
-            //InventoryList = UpdateInventoryList(local);//Should Update List everytime to show remaining availability
-            //AddToCart(user, currentProduct, userQuantity );
+            }while(userQuantity == -1 || userQuantity > InventoryList[userInput-1].Quantity || userQuantity < 0 );
+           
+            if(userQuantity > 0)
+            {
+                RemoveFromInventory(InventoryList[userInput-1].InventoryId, userQuantity);
+                InventoryList = UpdateInventoryList(local);//Should Update List everytime to show remaining availability
+                AddToCart(user, currentProduct, userQuantity );
+            }
+          }//End Of if(userInput < PlaceOrder && userInput > 0)
+             
+              Exit = InventoryList.Count + 2;
+              PlaceOrder = InventoryList.Count + 1;
+          if(userInput != exitNumber)
+          {
+            for(int i = 0; i < InventoryList.Count; i++ )
+            {
+              Console.WriteLine($"Item {count}: {InventoryList[i].Product.ProductName} ${InventoryList[i].Product.Price}\n\t{InventoryList[i].Product.Description} {InventoryList[i].Quantity} Left.");
+              count ++;
+            }
+
+            Console.WriteLine($"\n{PlaceOrder}: --Place Order--");
+            Console.WriteLine($"{Exit}: ----Exit---- \n\tYour cart will stay if you leave");
+            count = 1;
+            cycle = 1;
           }
 
-          for(int i = 0; i < InventoryList.Count; i++ )
-          {
-            Console.WriteLine($"Item {count}: {InventoryList[i].Product.ProductName} ${InventoryList[i].Product.Price}\n\t{InventoryList[i].Product.Description} {InventoryList[i].Quantity} Left.");
-            count ++;
-          }
-
-          Exit = InventoryList.Count + 2;
-          PlaceOrder = InventoryList.Count + 1; 
-          Console.WriteLine($"\n{PlaceOrder}: --Place Order--");
-          Console.WriteLine($"{Exit}: ----Exit---- \n\tYour cart will stay if you dont log out");
-          count = 1;
-          
-          if(userInput == PlaceOrder)
-          {
-            Console.WriteLine("Placing Order...\n");
-            PlaceCartInOrder(user);
-          }
-          if(userInput == Exit)
-          {
-            Console.WriteLine("Exiting...\n");
-          }
-
-      }while(userInput != Exit && userInput != PlaceOrder);
+      }while(userInput != exitNumber); //End of 1st do loop
       
     }
     
 
       /// <summary>
-      /// 
+      /// Adds the currently selected Product and the amount to a cart object
+      /// connected to a user by the foriegn key
       /// </summary>
       /// <param name="customerId"></param>
       /// <param name="addThisProduct"></param>
@@ -301,27 +311,50 @@ namespace Project0
       public void AddToCart (Customer customerId, Product addThisProduct, int amount)
       {
 
-        Cart currentCart = new Cart();
-        currentCart.Owner = customerId;
-        currentCart.Product = addThisProduct;
-        currentCart.amount = amount;
-        CartSet.Add(currentCart);
-        DbContext.SaveChanges();
+        if(addThisProduct != null)
+        {
+          Cart currentCart = new Cart();
+          currentCart.Owner = customerId;
+          currentCart.Product = addThisProduct;
+          currentCart.amount = amount;
+          CartSet.Add(currentCart);
+          DbContext.SaveChanges();
+          
+          Console.WriteLine("-----Item Added To Cart------");
+        }
         
-        Console.WriteLine("Item Added To Cart");
       }
 
-      public void PlaceCartInOrder(Customer user)
+      /// <summary>
+      /// Compares the users ID with the Dbset Id. Any matching Id's are placed into an order object 
+      /// then sent to the database
+      /// </summary>
+      /// <param name="user"></param>
+      /// <param name="local"></param>
+      public void PlaceCartInOrder(Customer user, Location local)
       {
-        Cart cartToBeDestroyed = new Cart();
-        cartToBeDestroyed = CartSet.Where(x => x.Owner == user).FirstOrDefault();
-        
-
+        foreach(Cart Karts in CartSet)
+        {
+          if(Karts.Owner.CustomerId == user.CustomerId)
+          {
+            Order Order = new Order();
+            Order.Customer = user; 
+            Order.Location = local;
+            Order.ProductName = Karts.Product.ProductName;
+            Order.Amount = Karts.amount;
+            Order.Price = (Karts.amount * Karts.Product.Price);
+            CartSet.Remove(Karts);
+            OrderSet.Add(Order);
+          }
+        }
+        DbContext.SaveChanges();
+        Console.WriteLine("Finished your Order\n");
 
       }
 
       /// <summary>
       /// Removes the selected quantity from an inventory item using the PK from the database 
+      /// saves the changes
       /// </summary>
       /// <param name="inventoryId"></param>
       /// <param name="productRemoved"></param>
@@ -369,10 +402,103 @@ namespace Project0
                 Console.WriteLine("Invalid response");
                 return -1; 
             }
-            Console.WriteLine(result);
             return result;
 
         }
+
+        /// <summary>
+        /// Prints the Order History of the user given. Says when there is none to print
+        /// </summary>
+        /// <param name="user"></param>
+        public void PrintCurrentUserOrderHistory(Customer user)
+        {
+          int cycle = -1;
+          Console.WriteLine($"\nUser {user.Uname}");
+
+          List<Customer> NothingValue1 = customersSet.ToList();
+          List<Location> NothingValue = LocationsSet.ToList();
+          foreach(Order orders in OrderSet)
+          {
+            if(orders.Customer.CustomerId == user.CustomerId)
+            {
+              cycle = 1;
+              Console.WriteLine($"\nID:{orders.OrderId} Location:{orders.Location.LocationName} Item:{orders.ProductName} Amount:{orders.Amount} Price: ${orders.Price}");
+            }
+          }
+
+          if(cycle == -1)
+          {
+            Console.WriteLine($"No Order History for {user.Uname}\n");
+          }
+        }
+
+
+        /// <summary>
+        /// Prints the current cart of the user given. Says when there is none to print
+        /// </summary>
+        /// <param name="user"></param>
+        public void PrintCurrentUsersCart(Customer user)
+        {
+          int cycle = -1;
+          List<Product> NothingValue = productsSet.ToList();//I Dont Know Why but these make the thing work under Certian conditions ill figure it out
+          Console.WriteLine($"\nUser {user.Uname}");
+          foreach(Cart Karts in CartSet)
+          {
+            if(Karts.Owner.CustomerId == user.CustomerId)
+            {
+              cycle = 1;
+              Console.WriteLine($"\nID:{Karts.CartId} UserName:{Karts.Owner.Uname} Item:{Karts.Product.ProductName} Price: ${Karts.Product.Price}");
+            }
+          }
+
+          if(cycle == -1)
+          {
+            Console.WriteLine($"Cart is Empty for {user.Uname}\n");
+          }
+
+        }
+
+        /// <summary>
+        /// Prints out the name and lastname along with the username of the supplied username
+        /// warning if there isnt anyone by that username
+        /// </summary>
+        /// <param name="uname"></param>
+        public void PrintCustomerByUsername(string uname)
+        {
+          if(uname != "")
+          {
+            Customer user = new Customer();
+            user = customersSet.Where(x => x.Uname == uname).FirstOrDefault();
+            if(user == null)
+              {
+                  Console.WriteLine("This username does not exist!");
+              }
+              else
+              {
+                Console.WriteLine($"\n{user.Fname} {user.Lname} Username: {user.Uname}");
+              }
+          } 
+          else
+          {
+            Console.WriteLine("\nType a name\n");
+          }
+
+        }
+
+        public void PrintLocationOrderHistory(string locationName)
+        {
+          List<Location> dumbyList = LocationsSet.ToList();
+          List<Customer> dumbyList2 = customersSet.ToList();
+          foreach(Order orders in OrderSet)
+          {
+            if(orders.Location.LocationName == locationName)
+            {
+              Console.WriteLine($"\n{locationName} Username: {orders.Customer.Uname}\n Purchased: {orders.Amount} {orders.ProductName}  ${orders.Price}\n");
+            }
+          }
+
+        }
+
 
 /// <summary>
 /// A test to make sure the database was connected and that i knew what i was doing.

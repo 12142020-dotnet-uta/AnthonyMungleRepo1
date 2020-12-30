@@ -103,6 +103,36 @@ namespace Project0.Migrations
                     b.ToTable("Locations");
                 });
 
+            modelBuilder.Entity("Project0.Order", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("Project0.Product", b =>
                 {
                     b.Property<string>("ProductName")
@@ -139,6 +169,17 @@ namespace Project0.Migrations
                     b.HasOne("Project0.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductName");
+                });
+
+            modelBuilder.Entity("Project0.Order", b =>
+                {
+                    b.HasOne("Project0.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("Project0.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
                 });
 #pragma warning restore 612, 618
         }
