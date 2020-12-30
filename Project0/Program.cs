@@ -9,7 +9,7 @@ namespace Project0
         {
             int userOption = 0; //Used to navigate the menu
             Handler Handler = new Handler(); // used to Handle and check user input
-            Customer currentUser = new Customer();
+            Customer currentUser = new Customer();//The current customer to be logged on
             currentUser = null;
 
             while(userOption != 4)
@@ -55,6 +55,7 @@ namespace Project0
                             Console.WriteLine("\nSelect From The List Provided");
                             LocationIdList = Handler.PrintLocations();
                             numberOfLocations = LocationIdList.Count;
+
                             exitOption = numberOfLocations + 1;
                            // Console.WriteLine($"{numberOfLocations}");
                             userLocationOption = WasUserChoiceInt(Console.ReadLine());
@@ -96,12 +97,14 @@ namespace Project0
 
                             if(userOrderMenuChoice == 3)
                             {
-
+                                Console.WriteLine("Please type a username to locate a Customer");
+                                Handler.PrintCustomerByUsername(Console.ReadLine());
                             }
 
-                            if(userOrderMenuChoice == 3)
+                            if(userOrderMenuChoice == 4)
                             {
-
+                                Console.WriteLine("Please type the name of the location");
+                                Handler.PrintLocationOrderHistory(Console.ReadLine());
                             }
 
                         }while(userOrderMenuChoice != 5);
@@ -175,7 +178,7 @@ namespace Project0
             Console.WriteLine($"\n-----Welcome {customer.Fname}------- ");
                 do
                 {
-                    Console.WriteLine("What would you Like to do?");
+                    Console.WriteLine("\nWhat would you Like to do?");
                     Console.WriteLine("\n1: Choose a Location\n2: User Order History and Cart\n3: Exit");
                     userOption = WasUserChoiceInt(Console.ReadLine());
                     if(userOption > 3 || userOption < 1)
@@ -199,7 +202,7 @@ namespace Project0
             do
                 {
                     Console.WriteLine("What would you Like to do?");
-                    Console.WriteLine("\n1: View current user Order History\n2: View current user Cart\n3: Place Order \n4: View Customers \n5: ---Exit---");
+                    Console.WriteLine("\n1: View current user Order History\n2: View current user Cart\n3: Search Customers by username\n4: Display Location History \n5: ---Exit---");
                     userOption = WasUserChoiceInt(Console.ReadLine());
                     if(userOption > 5 || userOption < 1)
                     {

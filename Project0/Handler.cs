@@ -177,15 +177,6 @@ namespace Project0
         List<Inventory> LocationInventory = new List<Inventory>();
         LocationInventory = UpdateInventoryList(local);
         List<Product> FullProductList = productsSet.ToList();    //it likes to have this or else it will not work  
-        //  foreach(Inventory I in InventoriesSet)
-        //  {
-        //      if(I.Location == local)
-        //      {
-        //          LocationInventory.Add(I);
-        //          //Console.WriteLine($"{LocationInventory[i].Product.ProductName}");
-                
-        //      } 
-        // }
           
         for(int i = 0; i < LocationInventory.Count; i++ )
           {
@@ -229,20 +220,20 @@ namespace Project0
 /// <param name="local"></param>
       public void ChooseInventory( List<Inventory> InventoryList, Customer user, Location local)
       {
-        int exitNumber = -5;
-        int cycle = -1;
-        int count = 1;
-        int userInput = 0;
-        int userQuantity = 0;
-        int Exit = InventoryList.Count + 2;
-        int PlaceOrder = InventoryList.Count + 1;
-        Product currentProduct = new Product();
+        int exitNumber = -5; //The number that will exit the loop when
+        int cycle = -1; //Ensures that the Out Of inventory ALERT does not kick the user out when they orderd the last item
+        int count = 1; // Counts items for lists
+        int userInput = 0; //Wil be the user input
+        int userQuantity = 0; //Will be a different user input for quantity
+        int Exit = InventoryList.Count + 2; // Exit number for changing lists
+        int PlaceOrder = InventoryList.Count + 1; // Order number for changing lists
+        Product currentProduct = new Product(); //The product that will be ordered
 
         do
         {   
               
           if(!InventoryList.Any() && cycle == -1)
-          {Console.WriteLine("\nALERT--------Sorry this store is out of Inventory----"); break;}  //If a store has ran out of Inventory
+          {Console.WriteLine("\n--------ALERT--------\n-----Sorry this store is out of Inventory----"); break;}  //If a store has ran out of Inventory
 
           do
           {
@@ -279,7 +270,7 @@ namespace Project0
               {
                 Console.WriteLine("Please choose a number Or Make sure you have not exceeded the amount available! Zero to add Nothing");
               }
-            }while(userQuantity == -1 || userQuantity > InventoryList[userInput-1].Quantity || userQuantity < 1 );
+            }while(userQuantity == -1 || userQuantity > InventoryList[userInput-1].Quantity || userQuantity < 0 );
            
             if(userQuantity > 0)
             {
@@ -424,6 +415,7 @@ namespace Project0
           int cycle = -1;
           Console.WriteLine($"\nUser {user.Uname}");
 
+          List<Customer> NothingValue1 = customersSet.ToList();
           List<Location> NothingValue = LocationsSet.ToList();
           foreach(Order orders in OrderSet)
           {
@@ -466,6 +458,46 @@ namespace Project0
 
         }
 
+        /// <summary>
+        /// Prints out the name and lastname along with the username of the supplied username
+        /// warning if there isnt anyone by that username
+        /// </summary>
+        /// <param name="uname"></param>
+        public void PrintCustomerByUsername(string uname)
+        {
+          if(uname != "")
+          {
+            Customer user = new Customer();
+            user = customersSet.Where(x => x.Uname == uname).FirstOrDefault();
+            if(user == null)
+              {
+                  Console.WriteLine("This username does not exist!");
+              }
+              else
+              {
+                Console.WriteLine($"\n{user.Fname} {user.Lname} Username: {user.Uname}");
+              }
+          } 
+          else
+          {
+            Console.WriteLine("\nType a name\n");
+          }
+
+        }
+
+        public void PrintLocationOrderHistory(string locationName)
+        {
+          List<Location> dumbyList = LocationsSet.ToList();
+          List<Customer> dumbyList2 = customersSet.ToList();
+          foreach(Order orders in OrderSet)
+          {
+            if(orders.Location.LocationName == locationName)
+            {
+              Console.WriteLine($"\n{locationName} Username: {orders.Customer.Uname}\n Purchased: {orders.Amount} {orders.ProductName}  ${orders.Price}\n");
+            }
+          }
+
+        }
 
 
 /// <summary>
