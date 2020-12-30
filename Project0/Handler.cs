@@ -11,13 +11,13 @@ namespace Project0
     public class Handler
     {
 
-        static ProjectDbContext DbContext = new ProjectDbContext();
-        DbSet<Customer> customersSet = DbContext.Customers;
-        DbSet<Product> productsSet = DbContext.Products;
-        DbSet<Location> LocationsSet = DbContext.Locations;
-        DbSet<Inventory> InventoriesSet = DbContext.Inventories;
-        DbSet<Cart> CartSet = DbContext.Carts;
-        DbSet<Order> OrderSet = DbContext.Orders;
+        static ProjectDbContext DbContext = new ProjectDbContext(); //The main Database handler used to create db objects like sets
+        DbSet<Customer> customersSet = DbContext.Customers;//The dataset for all of the customer columns
+        DbSet<Product> productsSet = DbContext.Products;//The dataset for all of the product columns
+        DbSet<Location> LocationsSet = DbContext.Locations;//The dataset for all of the Location columns
+        DbSet<Inventory> InventoriesSet = DbContext.Inventories;//The dataset for all of the Inventories columns
+        DbSet<Cart> CartSet = DbContext.Carts;//The dataset for all of the cart columns
+        DbSet<Order> OrderSet = DbContext.Orders;//The dataset for all of the Order colums
         // public Handler(ProjectDbContext context)
         // {
         //     Handler.DbContext = context;

@@ -8,7 +8,7 @@ namespace Project0
     {
     
         [Key]
-        public int LocationId { get; set;}
-        public string LocationName{ get; set;}
+        public int LocationId { get; set;} //The Primary Key for the datatable represented in an int
+        public string LocationName{ get; set;} // The name displayed in the store
     }
 }
