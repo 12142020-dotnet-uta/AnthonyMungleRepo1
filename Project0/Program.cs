@@ -135,7 +135,7 @@ namespace Project0
                 do
                 {
                     Console.WriteLine("Please Log In or Create a User.");
-                    Console.WriteLine("\n1: Log In\n2: Create User\n3: View Shopping Menu\n4: --Exit--You will be Logged out!\n");
+                    Console.WriteLine("\n1: Log In/Switch user\n2: Create User\n3: View Shopping Menu\n4: --Exit--You will be Logged out!\n");
                     userOption = WasUserChoiceInt(Console.ReadLine());
                     if(userOption > 4 || userOption < 1)
                     {
