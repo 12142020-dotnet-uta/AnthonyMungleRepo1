@@ -1,0 +1,26 @@
+  
+.aboutMe{
+    font-family: cursive;
+    color:brown;
+    text-align: center;
+}
+
+.doesHe{
+    font-family: cursive;
+    color: #cf1818;
+    text-align: left;
+}
+#id{
+    color: #af7e15;
+}
+
+div, li{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important; 
+    color: rgb(26, 139, 77);
+}
+
+h1{
+    font-family: Brush Script MT (cursive);
+    color: rgb(255, 8, 0);
+    
+}
