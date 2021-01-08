@@ -1,16 +1,18 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Project1
+namespace ModelLayer
 {
     public class Cart
     {
-        private Guid cartId = Guid.NewGuid();
+    
         [Key]//Sets the below to be the key for the database
-        public Guid CartId { get{return cartId;} set {cartId = value;}}
+        public Guid CartId { get; set; } = Guid.NewGuid();
         public Product Product { get; set;}
         public Customer Owner {get; set;}
+
+        [Range(0, int.MaxValue)]
         public int amount {get; set;}
 
-    } ////POPULATE THE DATABASE!!!!!!!!!!!
+    } 
 }

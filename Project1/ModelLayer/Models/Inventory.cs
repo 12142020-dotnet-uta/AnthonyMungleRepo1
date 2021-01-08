@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Project1
+namespace ModelLayer
 {
     public class Inventory
     {
@@ -8,6 +8,8 @@ namespace Project1
         public int InventoryId { get;set;}
         public Location Location { get; set;}
         public Product Product { get; set;}
+
+        [Range(0, int.MaxValue)]
         public int Quantity { get; set;}
     }
 }

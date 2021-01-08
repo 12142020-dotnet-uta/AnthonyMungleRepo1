@@ -1,17 +1,25 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Project1
+namespace ModelLayer
 {
     public class Order
     {
-        private Guid orderId = Guid.NewGuid(); //Creates a new Guid For CustomerId
         [Key]//Sets the below to be the key for the database
-        public Guid OrderId { get{return orderId;} set {orderId = value;}} //Sets a public Guid to the above guid and returns the value
-        public Customer CustomerId {get; set;}
-        public Location LocationId {get; set;}
+        public Guid OrderId { get; set; } = Guid.NewGuid(); //Sets a public Guid to the above guid and returns the value
+        public Customer Customer {get; set;}
+        public Location Location {get; set;}
+
+        [StringLength(20, MinimumLength = 1, ErrorMessage = "Product must be from 3 to 20 characters")]
+        [RegularExpression(@"^[a-zA-z]+$", ErrorMessage = "Use letters only")]
+        [Required]
+        [Display(Name = "Product Name")]
         public string ProductName {get; set;}
+
+        [Range(0, double.MaxValue)]
         public double Price {get; set;}
+
+        [Range(0, int.MaxValue)]
         public int Amount {get; set;}
 
     }
