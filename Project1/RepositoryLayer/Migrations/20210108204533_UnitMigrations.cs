@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class initialMigration : Migration
+    public partial class UnitMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace RepositoryLayer.Migrations
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Uname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Fname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Lname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Lname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    ByteArrayImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {

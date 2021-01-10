@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ModelLayer.ViewModels.InventoryViewModel>
+
+@{
+    ViewData["Title"] = "InventoryList";
+}
+
+<h1>InventoryList</h1>
+@{ if (Model != null)
+    {
+        <p>
+            @Html.ActionLink("Back", "StartLocationMenu")
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InventoryId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductPicture)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Quantity)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InventoryId)
+                        </td>
+                        <td>
+                            <img class="img-responsive" src="@item.ProductPicture" alt="No Image Found" style="height:100px" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Add To Cart", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4>No Inventory To Display</h4>
+        @Html.ActionLink("Back", "StartLocationMenu")
+    }
+}

@@ -30,6 +30,7 @@ namespace Project1
             services.AddScoped<ProjectDbContext>();
             services.AddScoped<Repository>();
             services.AddScoped<BusinessLogicClass>();
+            services.AddScoped<Mapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

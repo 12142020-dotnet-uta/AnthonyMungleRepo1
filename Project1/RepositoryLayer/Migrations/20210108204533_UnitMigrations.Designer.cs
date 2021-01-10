@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Project1;
+using RepositoryLayer;
 
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20210106212604_initialMigration")]
-    partial class initialMigration
+    [Migration("20210108204533_UnitMigrations")]
+    partial class UnitMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace RepositoryLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
-            modelBuilder.Entity("Project1.Cart", b =>
+            modelBuilder.Entity("ModelLayer.Cart", b =>
                 {
                     b.Property<Guid>("CartId")
                         .ValueGeneratedOnAdd()
@@ -45,11 +45,14 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("Project1.Customer", b =>
+            modelBuilder.Entity("ModelLayer.Customer", b =>
                 {
                     b.Property<Guid>("CustomerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("ByteArrayImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Fname")
                         .IsRequired()
@@ -71,7 +74,7 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Project1.Inventory", b =>
+            modelBuilder.Entity("ModelLayer.Inventory", b =>
                 {
                     b.Property<int>("InventoryId")
                         .ValueGeneratedOnAdd()
@@ -96,7 +99,7 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("Project1.Location", b =>
+            modelBuilder.Entity("ModelLayer.Location", b =>
                 {
                     b.Property<int>("LocationId")
                         .ValueGeneratedOnAdd()
@@ -113,7 +116,7 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("Project1.Order", b =>
+            modelBuilder.Entity("ModelLayer.Order", b =>
                 {
                     b.Property<Guid>("OrderId")
                         .ValueGeneratedOnAdd()
@@ -145,7 +148,7 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Project1.Product", b =>
+            modelBuilder.Entity("ModelLayer.Product", b =>
                 {
                     b.Property<string>("ProductName")
                         .HasMaxLength(20)
@@ -165,13 +168,13 @@ namespace RepositoryLayer.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Project1.Cart", b =>
+            modelBuilder.Entity("ModelLayer.Cart", b =>
                 {
-                    b.HasOne("Project1.Customer", "Owner")
+                    b.HasOne("ModelLayer.Customer", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerCustomerId");
 
-                    b.HasOne("Project1.Product", "Product")
+                    b.HasOne("ModelLayer.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductName");
 
@@ -180,13 +183,13 @@ namespace RepositoryLayer.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Project1.Inventory", b =>
+            modelBuilder.Entity("ModelLayer.Inventory", b =>
                 {
-                    b.HasOne("Project1.Location", "Location")
+                    b.HasOne("ModelLayer.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId");
 
-                    b.HasOne("Project1.Product", "Product")
+                    b.HasOne("ModelLayer.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductName");
 
@@ -195,13 +198,13 @@ namespace RepositoryLayer.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Project1.Order", b =>
+            modelBuilder.Entity("ModelLayer.Order", b =>
                 {
-                    b.HasOne("Project1.Customer", "Customer")
+                    b.HasOne("ModelLayer.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
 
-                    b.HasOne("Project1.Location", "Location")
+                    b.HasOne("ModelLayer.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId");
 

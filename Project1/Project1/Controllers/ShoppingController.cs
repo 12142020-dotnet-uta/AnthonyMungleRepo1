@@ -7,46 +7,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Project1.Controllers//Controller, Business/ repo through the constructors //DependencyInjection
+namespace Project1.Controllers
 {
-    public class LoginController : Controller
+    public class ShoppingController : Controller
     {
+
         private BusinessLogicClass _businessLogicClass;
-        public LoginController(BusinessLogicClass businessLogicClass)
+        public ShoppingController(BusinessLogicClass businessLogicClass)
         {
-            _businessLogicClass = businessLogicClass;
+            this._businessLogicClass = businessLogicClass;
         }
 
-        // GET: Login
-        //[ActionName("Login")]
-        public ActionResult Login()
+        // GET: ShoppingController
+        public ActionResult Index()
         {
             return View();
         }
 
-        [ActionName("LoginCustomer")]
-        public ActionResult Login(LoginCustomerViewModel loginCustomerViewModel)
-        {
-
-            CustomerViewModel customerViewModel = _businessLogicClass.LogInCustomer(loginCustomerViewModel);
-            
-
-            return View("DisplayCustomerDetails" , customerViewModel);
-        }
-
-        // GET: Login/Details/5
+        // GET: ShoppingController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Login/Create
+        // GET: ShoppingController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Login/Create
+        // POST: ShoppingController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -61,13 +51,33 @@ namespace Project1.Controllers//Controller, Business/ repo through the construct
             }
         }
 
-        // GET: Login/Edit/5
-        public ActionResult Edit(int id)
+        // HERE
+        
+        public ActionResult Edit(Guid customerId)
         {
             return View();
         }
 
-        // POST: Login/Edit/5
+        
+        [ActionName("StartShoppingMenu")]
+        public IActionResult LocationList(Guid customerId)
+        {
+            List<LocationViewModel> locationViewModelList = _businessLogicClass.LocationList();
+
+            return View(locationViewModelList);
+
+        }
+
+        /*[ActionName("Shopping")]
+        public IActionResult ShoppingMenu()
+
+         public IActionResult ProductList(int locationId)
+        {
+
+            //return list of products
+        }*/
+
+        // POST: ShoppingController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -82,13 +92,13 @@ namespace Project1.Controllers//Controller, Business/ repo through the construct
             }
         }
 
-        // GET: Login/Delete/5
+        // GET: ShoppingController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Login/Delete/5
+        // POST: ShoppingController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

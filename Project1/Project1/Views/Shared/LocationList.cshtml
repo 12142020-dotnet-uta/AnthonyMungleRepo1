@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ModelLayer.ViewModels.LocationViewModel>
+
+@{
+    ViewData["Title"] = "LocationList";
+}
+
+<h1>LocationList</h1>
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LocationId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LocationName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LocationId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LocationName)
+            </td>
+            <td>
+                <!--Sends the locationID to whatever method on th controller-->
+                <a asp-controller="Customer" asp-action="InventoryList" asp-route-InventoryList="@item.LocationId" method="get" >View Inventory</a>
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
