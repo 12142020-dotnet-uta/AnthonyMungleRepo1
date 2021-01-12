@@ -59,6 +59,7 @@ namespace Project1.Controllers
         public ActionResult EditCustomer(Guid customerGuid)
         {
             CustomerViewModel customerViewModel = _businessLogicClass.EditCustomer(customerGuid);
+
             return View(customerViewModel);
         }
 
@@ -71,20 +72,38 @@ namespace Project1.Controllers
         }
 
         [ActionName("StartLocationMenu")]
-        public IActionResult LocationList()//Guid customerId)
+        public IActionResult LocationList(Guid customerGuid)
         {
-            List<LocationViewModel> locationViewModelList = _businessLogicClass.LocationList();
+            List<LocationViewModel> locationViewModelList = _businessLogicClass.LocationList(customerGuid);
             return View("LocationList", locationViewModelList);
         }
 
+
+
         [HttpGet]
-        public IActionResult InventoryList(int InventoryList)
+        public IActionResult InventoryList(int InventoryList, Guid customerGuid)//passes guid up to here
         {
-            List<InventoryViewModel> inventoryViewModels = _businessLogicClass.SearchInventoryList(InventoryList);
+            List<InventoryViewModel> inventoryViewModels = _businessLogicClass.SearchInventoryList(InventoryList, customerGuid);
             return View("InventoryList", inventoryViewModels);
         }
 
-       
+        [HttpGet]
+        public IActionResult AddingToCart(int LocationId, int InventoryId, string productName, Guid customerGuid)//Gets all the necessary values from here
+        {
+            AmountToAddViewModel amountToAddViewModel = _businessLogicClass.AmountToAdd(LocationId, InventoryId, productName, customerGuid);
+            return View("AddToCart", amountToAddViewModel);
+        }
+
+        public IActionResult CanBeAdded(AmountToAddViewModel amountToAddView)
+        {
+            if(amountToAddView.amount > amountToAddView.stock)
+            {
+                ModelState.AddModelError("Failure", "The amount you chose exceeded stock");
+                return View("AddToCart", amountToAddView);
+            }
+            return View();
+        }
+
 
         // POST: CustomerController/Edit/5
         [HttpPost]

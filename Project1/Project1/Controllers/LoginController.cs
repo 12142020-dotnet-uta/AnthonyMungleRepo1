@@ -17,21 +17,53 @@ namespace Project1.Controllers//Controller, Business/ repo through the construct
             _businessLogicClass = businessLogicClass;
         }
 
-        // GET: Login
-        //[ActionName("Login")]
         public ActionResult Login()
         {
             return View();
         }
 
-        [ActionName("LoginCustomer")]
-        public ActionResult Login(LoginCustomerViewModel loginCustomerViewModel)
+        // GET: Login
+        //[ActionName("Login")]
+        [ActionName("LoginView")]
+        public ActionResult Login(LoginViewModel logIn)
         {
+               if (ModelState.IsValid)
+              {
+                //need to update it to see if the username is unique
+                CustomerViewModel customerViewModel = _businessLogicClass.LogInCustomerUsingUsername(logIn);
+                  if (customerViewModel == null)
+                  {
+                      ModelState.AddModelError("Failure", "This username does NOT exist! Please create a user");
+                      return View();
+                  }
 
-            CustomerViewModel customerViewModel = _businessLogicClass.LogInCustomer(loginCustomerViewModel);
-            
+                  return View("DisplayCustomerDetails", customerViewModel);
+              }
+              else
+              {
+                return View();
+              }
+        }
 
-            return View("DisplayCustomerDetails" , customerViewModel);
+        [ActionName("CreateCustomer")]
+        public ActionResult Login(CreateCustomerViewModel CreateCustomerViewModel)
+        {//loginCustomerViewModel
+            if (ModelState.IsValid)
+            {
+                //need to update it to see if the username is unique
+                CustomerViewModel customerViewModel = _businessLogicClass.LogInCustomer(CreateCustomerViewModel);
+                if (customerViewModel == null)
+                {
+                    ModelState.AddModelError("Failure", "This username is already taken");
+                    return View("login");
+                }
+
+                return View("DisplayCustomerDetails", customerViewModel);
+            }
+            else
+            {
+                return View(CreateCustomerViewModel);
+            }
         }
 
         // GET: Login/Details/5

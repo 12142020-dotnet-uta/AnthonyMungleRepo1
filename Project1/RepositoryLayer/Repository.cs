@@ -33,10 +33,24 @@ namespace RepositoryLayer
             _logger = logger;
         }
 
+        public Customer LogInCustomerWithUserName(string userName)
+        {
+            Customer user = customerSet.Where(x => x.Uname == userName).FirstOrDefault();
+            if(user != null)
+            {
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
 
         public Customer LogInCustomer(Customer customer)
         {
-            Customer customer1 = customerSet.FirstOrDefault(x => x.Fname == customer.Fname && x.Lname == customer.Lname && x.Uname == customer.Uname);
+            Customer customer1 = customerSet.FirstOrDefault(x => x.Uname == customer.Uname);
 
             if (customer1 == null)
             {
@@ -58,7 +72,8 @@ namespace RepositoryLayer
                     _logger.LogInformation($"Saving a player to the Db threw an error, {ex}");
                 }
             }
-            return customer1;
+            //return customer1;
+            return null;
         }
 
         public Customer GetCustomerById(Guid customerId)
@@ -85,6 +100,7 @@ namespace RepositoryLayer
 
         public List<Location> LocationList()
         {
+           // AddProductPhotos(); Only called to update pictures if need be
             return locationSet.ToList();
         }
 
@@ -103,6 +119,60 @@ namespace RepositoryLayer
             }
 
             return inventoryList;
+        }
+
+        public Cart GetCart(Guid customerGuid)
+        {
+            return cartSet.Where(x => x.Owner.CustomerId == customerGuid).FirstOrDefault();
+        }
+
+        public Product GetProduct(string pName)
+        {
+            Product tempProduct = productSet.Where(x => x.ProductName == pName).FirstOrDefault();
+            return tempProduct;
+        }
+
+        public int GetInventoryStock(int inventoryId)
+        {
+            Inventory invent = new Inventory();
+            invent = inventorySet.Where(x => x.InventoryId == inventoryId).FirstOrDefault();
+            int stock = invent.Quantity;
+            return stock;
+        }
+        public void AddProductPhotos()
+        {
+            int count = 1;
+            foreach(Product P in productSet)
+            {
+                if(count == 1)
+                {
+                    P.ByteArrayImage = System.IO.File.ReadAllBytes(@"wwwroot\Project1Images\REDAPPLE.jpg");
+                }
+                if (count == 2)
+                {
+                    P.ByteArrayImage = System.IO.File.ReadAllBytes(@"wwwroot\Project1Images\Bacon.jpg");
+                }
+                if (count == 3)
+                {
+                    P.ByteArrayImage = System.IO.File.ReadAllBytes(@"wwwroot\Project1Images\Beans.jpeg");
+                }
+                if (count == 4)
+                {
+                    P.ByteArrayImage = System.IO.File.ReadAllBytes(@"wwwroot\Project1Images\WaterBottle.jpg");
+                }
+                if (count == 5)
+                {
+                    P.ByteArrayImage = System.IO.File.ReadAllBytes(@"wwwroot\Project1Images\orange.jpg");
+                }
+                if (count == 6)
+                {
+                    P.ByteArrayImage = System.IO.File.ReadAllBytes(@"wwwroot\Project1Images\pear.jpg");
+                }
+                count++;
+            }
+            _dbcontext.SaveChanges();
+
+
         }
 
 

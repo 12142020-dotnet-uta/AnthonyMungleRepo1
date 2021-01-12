@@ -12,6 +12,7 @@ namespace ModelLayer.ViewModels
     {
      
        // [Key]//Sets the below to be the key for the database
+
         public Guid CustomerId { get; set; } = Guid.NewGuid(); //Sets a public Guid to the above guid and returns the value
 
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Name must be from 3 to 20 characters")]

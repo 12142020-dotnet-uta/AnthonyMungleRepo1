@@ -28,10 +28,11 @@ namespace BusinessLogicLayer
 
         }
 
-        public LocationViewModel convertToLocationViewModel(Location location)
+        public LocationViewModel convertToLocationViewModel(Location location, Guid customerGuid)
         {
             LocationViewModel locationViewModel = new LocationViewModel()
             {
+                CustomerId = customerGuid,
                 LocationId = location.LocationId,
                 LocationName = location.LocationName
                 
@@ -54,10 +55,12 @@ namespace BusinessLogicLayer
             return productModelView;
         }
 
-        public InventoryViewModel convertToInventoryModelView(Inventory inventory)
+        public InventoryViewModel convertToInventoryModelView(Inventory inventory, Guid customerGuid)
         {
             InventoryViewModel inventoryViewModel = new InventoryViewModel()
             {
+                LocationId = inventory.Location.LocationId,
+                CustomerId = customerGuid,
                 InventoryId = inventory.InventoryId,
                 ProductName = inventory.Product.ProductName,
                 Quantity = inventory.Quantity,
@@ -68,7 +71,9 @@ namespace BusinessLogicLayer
             return inventoryViewModel;
         }
 
-        private string ConvertByteArrayToString(byte[] byteArray)
+
+
+        public string ConvertByteArrayToString(byte[] byteArray)
         {
             if (byteArray != null)
 			{

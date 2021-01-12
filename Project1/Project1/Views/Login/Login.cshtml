@@ -1,16 +1,16 @@
-﻿@model ModelLayer.ViewModels.LoginCustomerViewModel
+﻿@model ModelLayer.ViewModels.CreateCustomerViewModel
 
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Create User";
 }
 
-<h1>Login</h1>
-
 <h4>Please Type your Credintials</h4>
+<div class="text-danger">@Html.ValidationMessage("Failure")</div>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="LoginCustomer">
+        <form asp-action="CreateCustomer">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Uname" class="control-label"></label>
@@ -29,8 +29,10 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="button" value="Back" class ="btn btn-primary" onclick="history.back()">   
             </div>
-        </form>
+
+        </form> 
     </div>
 </div>
 

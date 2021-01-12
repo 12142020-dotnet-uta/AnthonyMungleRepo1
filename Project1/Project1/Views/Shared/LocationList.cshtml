@@ -9,6 +9,8 @@
 @*<p>
     <a asp-action="Create">Create New</a>
 </p>*@
+
+@*@<p>@Html.DisplayNameFor(model => model.CustomerId)</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -32,8 +34,7 @@
             </td>
             <td>
                 <!--Sends the locationID to whatever method on th controller-->
-                <a asp-controller="Customer" asp-action="InventoryList" asp-route-InventoryList="@item.LocationId" method="get" >View Inventory</a>
-               
+                <a asp-controller="Customer" asp-action="InventoryList" asp-route-InventoryList="@item.LocationId" asp-route-customerGuid="@item.CustomerId" method="get">View Inventory</a>
             </td>
         </tr>
 }

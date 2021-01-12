@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ModelLayer.ViewModels
 {
-    public class LoginCustomerViewModel
+    public class CreateCustomerViewModel //LoginCustomerViewModel
     {
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Name must be from 3 to 20 characters")]
         [RegularExpression(@"^[a-zA-z]+$", ErrorMessage = "Use letters only")]
         [Required]
-        [Display(Name = "User Name")]
+        [Display(Name = "UNIQUE User Name")]
         public string Uname { get; set; }
 
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Name must be from 3 to 20 characters")]

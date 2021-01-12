@@ -23,7 +23,7 @@ namespace BusinessLogicLayer
         /// Takes a Login playerViewModel instance and returns a playerViewModel instance
         /// </summary>
         /// <returns></returns>
-        public CustomerViewModel LogInCustomer(LoginCustomerViewModel loginCustomerViewModel)
+        public CustomerViewModel LogInCustomer(CreateCustomerViewModel loginCustomerViewModel)
         {
             Customer customer = new Customer()
             {
@@ -33,9 +33,14 @@ namespace BusinessLogicLayer
             };
 
             Customer currentCustomer = _repository.LogInCustomer(customer);
+            if(currentCustomer != null)
+            {
+                CustomerViewModel customerViewModel = _mapper.convertToCustomerViewModel(currentCustomer);
+                return customerViewModel;
+            }
+            return null;
 
-            CustomerViewModel customerViewModel = _mapper.convertToCustomerViewModel(currentCustomer);
-            return customerViewModel;
+            
         }
 
         public CustomerViewModel EditCustomer(Guid customerGuid)
@@ -63,7 +68,7 @@ namespace BusinessLogicLayer
 
         }
 
-        public List<LocationViewModel> LocationList()
+        public List<LocationViewModel> LocationList(Guid customerGuid)
         {
 
             List<Location> locationList = _repository.LocationList();
@@ -71,25 +76,63 @@ namespace BusinessLogicLayer
             List<LocationViewModel> locationViewModelList = new List<LocationViewModel>();
             foreach(Location L in locationList)
             {
-                locationViewModelList.Add(_mapper.convertToLocationViewModel(L));
+                locationViewModelList.Add(_mapper.convertToLocationViewModel(L, customerGuid));
             }
 
             return locationViewModelList;
 
         }
 
-        public List<InventoryViewModel> SearchInventoryList(int locationId)
+        public List<InventoryViewModel> SearchInventoryList(int locationId, Guid customerGuid)
         {
             List<Inventory> inventoryList = _repository.SearchInventoryList(locationId);
             List<InventoryViewModel> inventoryViewModel = new List<InventoryViewModel>();
 
             foreach(Inventory I in inventoryList)
             {
-
-                inventoryViewModel.Add(_mapper.convertToInventoryModelView(I));
+               
+                inventoryViewModel.Add(_mapper.convertToInventoryModelView(I, customerGuid));
 
             }
             return inventoryViewModel;
+        }
+
+        public CustomerViewModel LogInCustomerUsingUsername(LoginViewModel user)
+        {
+            string username = user.Uname;
+            Customer currentCustomer = _repository.LogInCustomerWithUserName(username);
+            if (currentCustomer != null)
+            {
+                CustomerViewModel customerViewModel = _mapper.convertToCustomerViewModel(currentCustomer);
+                return customerViewModel;
+            }
+            return null;
+
+        }
+
+        public AmountToAddViewModel AmountToAdd(int locationId, int inventoryId, string productName, Guid customerGuid)
+        {
+            // Cart currentCart = _repository.GetCart(customerGuid);
+            Product product = new Product();
+            product = _repository.GetProduct(productName);
+            byte[] picture = product.ByteArrayImage;
+            int amountTotal = _repository.GetInventoryStock(inventoryId);
+
+            AmountToAddViewModel addToCartViewModel = new AmountToAddViewModel()
+            {
+                stock = amountTotal,
+                location = locationId,
+                CustomerId = customerGuid,
+                inventory = inventoryId,
+                Product = productName,
+                discription = product.Description
+                
+            };
+            if(picture != null)
+            {
+                addToCartViewModel.JpgString = _mapper.ConvertByteArrayToString(picture);
+            }
+            return addToCartViewModel;
         }
     }
 }

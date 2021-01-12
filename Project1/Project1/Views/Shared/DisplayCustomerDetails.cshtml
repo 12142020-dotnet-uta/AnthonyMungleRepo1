@@ -44,5 +44,5 @@
     <!--Calls the EditCustomer(Guid) from CustomerController-->
     <a asp-controller="Customer" asp-action="EditCustomer" asp-route-customerGuid="@Model.CustomerId">Edit Customer</a>
     <a asp-action="Customer">Display Customer List</a>
-    <a asp-controller="Customer" asp-action="StartLocationMenu">Start Shopping</a><!--Might need customerID LAter-->
+    <a asp-controller="Customer" asp-action="StartLocationMenu" asp-route-customerGuid="@Model.CustomerId">Start Shopping</a><!--Might need customerID LAter-->
     </div>

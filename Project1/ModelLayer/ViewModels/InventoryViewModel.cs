@@ -9,8 +9,10 @@ namespace ModelLayer.ViewModels
 {
     public class InventoryViewModel
     {
+        public Guid CustomerId { get; set; }//Maybe neweGuid;
         public int InventoryId { get; set; }
 
+        public int LocationId { get; set; }
         public string ProductPicture { get; set; }
 
         public string ProductName { get; set; }
