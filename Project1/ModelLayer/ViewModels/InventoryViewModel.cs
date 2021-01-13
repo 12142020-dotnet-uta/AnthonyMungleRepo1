@@ -18,7 +18,7 @@ namespace ModelLayer.ViewModels
         [Display(Name = "Location")]
         public int LocationId { get; set; }
 
-        [Display(Name = "")]
+        [Display(Name = " ")]
         public string ProductPicture { get; set; }
 
         [Display(Name = "Product")]
