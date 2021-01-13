@@ -10,9 +10,13 @@ using ModelLayer.ViewModels;
 
 namespace RepositoryLayer
 {
+    /// <summary>
+    /// Handles all Everything dealing with the entry or
+    /// retrieval of database info
+    /// </summary>
     public class Repository
     {
-
+        //The variables for dealing with the DB
         private readonly ProjectDbContext _dbcontext;
         private readonly ILogger<Repository> _logger;
         DbSet<Customer> customerSet;
@@ -34,6 +38,12 @@ namespace RepositoryLayer
             _logger = logger;
         }
 
+        /// <summary>
+        /// Returns the current user based on the username passed
+        /// returns null if usernames do not match DB
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public Customer LogInCustomerWithUserName(string userName)
         {
             Customer user = customerSet.Where(x => x.Uname == userName).FirstOrDefault();
@@ -48,10 +58,15 @@ namespace RepositoryLayer
 
         }
 
-
+        /// <summary>
+        /// Doesn't Log in instead creates the user if it doesnt exist
+        /// then creates and returns if it does
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         public Customer LogInCustomer(Customer customer)
         {
-            AddProductPhotos();// ONLY CALL IF PHOTOS NEED TO BE UPDATED
+           // AddProductPhotos();// ONLY CALL IF PHOTOS NEED TO BE UPDATED
             Customer customer1 = customerSet.FirstOrDefault(x => x.Uname == customer.Uname);
 
             if (customer1 == null)
@@ -78,12 +93,23 @@ namespace RepositoryLayer
             return null;
         }
 
+        /// <summary>
+        /// returns a customer based on the Guid passed
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
         public Customer GetCustomerById(Guid customerId)
         {
             Customer customer = customerSet.FirstOrDefault(x => x.CustomerId == customerId);
             return customer;
         }
 
+        /// <summary>
+        /// Searches the database for carts matching the Guid
+        /// then returns a list of them
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public List<Cart> SearchCartList(Guid customerGuid)
         {
            
@@ -99,6 +125,10 @@ namespace RepositoryLayer
             return cartList;
         }
 
+        /// <summary>
+        /// Deletes the cart matching the Guid However has an issue with Inventory
+        /// </summary>
+        /// <param name="cartId"></param>
         public void DeleteCart(Guid cartId)
         {
             Cart cart = cartSet.Where(x => x.CartId == cartId).Include(x => x.Product).Include(x => x.Owner).FirstOrDefault();
@@ -115,6 +145,11 @@ namespace RepositoryLayer
             }
         }
 
+        /// <summary>
+        /// Creates the inventory using the cart
+        /// </summary>
+        /// <param name="cart"></param>
+        /// <returns></returns>
         public Inventory CreateInventory(Cart cart)
         {
             Inventory invent = new Inventory();
@@ -124,12 +159,23 @@ namespace RepositoryLayer
             return invent;
         }
 
+        /// <summary>
+        /// Gets the products using the parameter name
+        /// </summary>
+        /// <param name="pName"></param>
+        /// <returns></returns>
         public Product GetProduct(string pName)
         {
             Product tempProduct = productSet.Where(x => x.ProductName == pName).FirstOrDefault();
             return tempProduct;
         }
 
+        /// <summary>
+        /// Retrieves the stock from invetorie with matching
+        /// Id's
+        /// </summary>
+        /// <param name="inventoryId"></param>
+        /// <returns></returns>
         public int GetInventoryStock(int inventoryId)
         {
             Inventory invent = new Inventory();
@@ -138,6 +184,11 @@ namespace RepositoryLayer
             return stock;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         public Customer EditCustomer(Customer customer)
         {
 
@@ -153,11 +204,20 @@ namespace RepositoryLayer
             return anotherCustomer;
         }
 
+        /// <summary>
+        /// returns the location lists fro mthe DB
+        /// </summary>
+        /// <returns></returns>
         public List<Location> LocationList()
         {
             return locationSet.ToList();
         }
 
+        /// <summary>
+        /// Searches the inventory for each locationID given
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public List<Inventory> SearchInventoryList(int location)
         {
             //List<Location> blah = locationSet.ToList(); //pesky lazy loading will fix later
@@ -175,6 +235,11 @@ namespace RepositoryLayer
             return inventoryList;
         }
 
+        /// <summary>
+        /// takes an AmountToAddViewModel and adds the properties to a cart 
+        /// in the DB
+        /// </summary>
+        /// <param name="amountToAddView"></param>
         public void AddToCart(AmountToAddViewModel amountToAddView)
         {
             Cart currentCart = new Cart();
@@ -186,6 +251,11 @@ namespace RepositoryLayer
             _dbcontext.SaveChanges();
         }
 
+        /// <summary>
+        /// Subtracts the given amount from the inventory with the given ID
+        /// </summary>
+        /// <param name="inventoryId"></param>
+        /// <param name="amount"></param>
         public void SubtractFromInventory(int inventoryId, int amount)
         {
             foreach (Inventory inventory in inventorySet.Include(x => x.Location).Include(x => x.Product))
@@ -213,6 +283,11 @@ namespace RepositoryLayer
             _dbcontext.SaveChanges();
         }
 
+        /// <summary>
+        /// Searches the OderSet for the orders with the given locationIds
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <returns></returns>
         public List<Order> SearchOrderList(int locationId)
         {
             List<Order> orderList = new List<Order>();
@@ -228,6 +303,11 @@ namespace RepositoryLayer
 
         }
 
+        /// <summary>
+        /// returns a cart with the given cart GUID
+        /// </summary>
+        /// <param name="cart"></param>
+        /// <returns></returns>
         public Cart GetCart(Guid cart)
         {
             Cart cartObject = new Cart();
@@ -235,6 +315,11 @@ namespace RepositoryLayer
             return cartObject;
         }
 
+        /// <summary>
+        /// Returns a location with the given ID
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <returns></returns>
         public Location GetLocationById(int locationId)
         {
             Location location = new Location();
@@ -242,6 +327,11 @@ namespace RepositoryLayer
             return location;
         }
 
+        /// <summary>
+        /// Uses the cartID to search the DB for a cart
+        /// then adds to the databse deletes when done
+        /// </summary>
+        /// <param name="cartId"></param>
         public void OrderNow(Guid cartId)
         {
             Order newOrder = new Order();
@@ -254,7 +344,7 @@ namespace RepositoryLayer
             newOrder.Price = cart.Product.Price * cart.amount;
             newOrder.ProductName = cart.Product.ProductName;
             newOrder.Date = DateTime.Now;
-
+            DeleteCart(cartId);
             orderSet.Add(newOrder);
             _dbcontext.SaveChanges();
         }

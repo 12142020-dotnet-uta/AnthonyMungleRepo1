@@ -47,6 +47,6 @@
     <!--Calls the EditCustomer(Guid) from CustomerController-->
     <a class="btn btn-primary" asp-controller="Customer" asp-action="EditCustomer" asp-route-customerGuid="@Model.CustomerId">Edit Customer</a>
     
-    <a class="btn btn-dark" style="color:blue" asp-controller="Customer" asp-action="StartLocationMenu" asp-route-customerGuid="@Model.CustomerId">Start Shopping</a><!--Might need customerID LAter-->
+    <a class="btn btn-dark" asp-controller="Customer" asp-action="StartLocationMenu" asp-route-customerGuid="@Model.CustomerId">Start Shopping</a><!--Might need customerID LAter-->
     <a asp-controller="Customer" asp-action="ViewCart" asp-route-customerGuid="@Model.CustomerId">View Cart</a>
     </div>

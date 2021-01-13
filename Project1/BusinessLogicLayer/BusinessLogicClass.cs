@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer
 { 
+    /// <summary>
+    /// Handles the main functions and code of the project
+    /// </summary>
     public class BusinessLogicClass
     {
         private readonly Repository _repository;
@@ -43,6 +46,11 @@ namespace BusinessLogicLayer
             
         }
 
+        /// <summary>
+        /// Takes a customer Guid and tranforms it into a view model
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public CustomerViewModel EditCustomer(Guid customerGuid)
         {
             Customer customer = _repository.GetCustomerById(customerGuid);
@@ -51,6 +59,12 @@ namespace BusinessLogicLayer
 
         }
 
+        /// <summary>
+        /// Takes a customer view Model and transforms into another one 
+        /// with the given variables inside the parameter
+        /// </summary>
+        /// <param name="customerViewModel"></param>
+        /// <returns></returns>
         public CustomerViewModel EditedCustomer(CustomerViewModel customerViewModel)
         {
             Customer customer = _repository.GetCustomerById(customerViewModel.CustomerId);
@@ -68,6 +82,11 @@ namespace BusinessLogicLayer
 
         }
 
+        /// <summary>
+        /// Retrieves a list of available locations
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public List<LocationViewModel> LocationList(Guid customerGuid)
         {
 
@@ -83,6 +102,12 @@ namespace BusinessLogicLayer
 
         }
 
+        /// <summary>
+        /// Retreives a list of Inventories using the location iD
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public List<InventoryViewModel> SearchInventoryList(int locationId, Guid customerGuid)
         {
             List<Inventory> inventoryList = _repository.SearchInventoryList(locationId);
@@ -97,6 +122,11 @@ namespace BusinessLogicLayer
             return inventoryViewModel;
         }
 
+        /// <summary>
+        /// Creates a customerViewModel from a LogInViewMOdel
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public CustomerViewModel LogInCustomerUsingUsername(LoginViewModel user)
         {
             string username = user.Uname;
@@ -110,6 +140,15 @@ namespace BusinessLogicLayer
 
         }
 
+        /// <summary>
+        /// Determines the amount of items to add to a AMountToAddViewModel using the parameter listed
+        /// 
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <param name="inventoryId"></param>
+        /// <param name="productName"></param>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public AmountToAddViewModel AmountToAdd(int locationId, int inventoryId, string productName, Guid customerGuid)
         {
             // Cart currentCart = _repository.GetCart(customerGuid);
@@ -135,16 +174,30 @@ namespace BusinessLogicLayer
             return addToCartViewModel;
         }
 
+        /// <summary>
+        /// Throws an AmountToAddViewModel to the repository
+        /// </summary>
+        /// <param name="amountToAddViewModel"></param>
         public void AddToCart(AmountToAddViewModel amountToAddViewModel)
         {
             _repository.AddToCart(amountToAddViewModel);
         }
 
+        /// <summary>
+        /// Throws two variables to the repository SubtractFromInventory
+        /// </summary>
+        /// <param name="inventoryId"></param>
+        /// <param name="amount"></param>
         public void SubtractFromInventory(int inventoryId, int amount)
         {
             _repository.SubtractFromInventory(inventoryId, amount);
         }
 
+        /// <summary>
+        /// Returns a list of CartViewModels
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public List<CartViewModel> cartViewModel(Guid customerGuid)
         {
              List<Cart> cartList = _repository.SearchCartList(customerGuid);
@@ -157,16 +210,32 @@ namespace BusinessLogicLayer
           
         }
 
+        /// <summary>
+        /// Throws a cart Guid to the repository
+        /// </summary>
+        /// <param name="cartId"></param>
         public void OrderNow(Guid cartId)
         {
             _repository.OrderNow(cartId);
         }
 
+        /// <summary>
+        /// throws a cartGuid to the rpositry
+        /// </summary>
+        /// <param name="cartId"></param>
         public void DeleteCartItem(Guid cartId)
         {
             _repository.DeleteCart(cartId);
         }
 
+
+        /// <summary>
+        /// returns a list of OrderViewMOdeles
+        /// Act as the Locations History
+        /// </summary>
+        /// <param name="LocationId"></param>
+        /// <param name="CustomerId"></param>
+        /// <returns></returns>
         public List<OrderViewModel> ViewOrderHistory(int LocationId, Guid CustomerId)
         {
             List<Order> order = _repository.SearchOrderList(LocationId);

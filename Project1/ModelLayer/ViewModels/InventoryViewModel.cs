@@ -9,9 +9,13 @@ namespace ModelLayer.ViewModels
 {
     public class InventoryViewModel
     {
+        [Display(Name = "User")]
         public Guid CustomerId { get; set; }
+
+        [Display(Name = "Inventory")]
         public int InventoryId { get; set; }
 
+        [Display(Name = "Location")]
         public int LocationId { get; set; }
 
         [Display(Name = "")]

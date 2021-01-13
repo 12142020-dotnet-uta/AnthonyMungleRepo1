@@ -10,9 +10,18 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer
 {
+    /// <summary>
+    /// Handles the Conversoins of
+    /// information
+    /// </summary>
     public class Mapper
     {
 
+        /// <summary>
+        /// Converts a customer object to a CustomerViewModel
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         public CustomerViewModel convertToCustomerViewModel(Customer customer)
         {
             CustomerViewModel customerViewModel = new CustomerViewModel()
@@ -28,6 +37,13 @@ namespace BusinessLogicLayer
 
         }
 
+        /// <summary>
+        /// Converts a location object and customer Guid
+        /// into a LocationViewModel
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public LocationViewModel convertToLocationViewModel(Location location, Guid customerGuid)
         {
             LocationViewModel locationViewModel = new LocationViewModel()
@@ -42,6 +58,11 @@ namespace BusinessLogicLayer
 
         }
 
+        /// <summary>
+        /// Converts Product object to ProductViewModel
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public ProductModelView convertToProductModelView(Product product)
         {
             ProductModelView productModelView = new ProductModelView()
@@ -55,6 +76,12 @@ namespace BusinessLogicLayer
             return productModelView;
         }
 
+        /// <summary>
+        /// Converts an inventory into an inventory view model
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public InventoryViewModel convertToInventoryModelView(Inventory inventory, Guid customerGuid)
         {
             InventoryViewModel inventoryViewModel = new InventoryViewModel()
@@ -71,6 +98,11 @@ namespace BusinessLogicLayer
             return inventoryViewModel;
         }
 
+        /// <summary>
+        /// converts a Cart object into a CartViewModel
+        /// </summary>
+        /// <param name="cart"></param>
+        /// <returns></returns>
         public CartViewModel ConvertToCartViewModel(Cart cart)
         {
             CartViewModel cartViewModel = new CartViewModel()
@@ -85,6 +117,11 @@ namespace BusinessLogicLayer
             return cartViewModel;
         }
 
+        /// <summary>
+        /// Converts an Order Object to an OrderViewModel
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         public OrderViewModel ConvertToOrderViewModel(Order order)
         {
             OrderViewModel orderViewModel = new OrderViewModel()
@@ -101,7 +138,11 @@ namespace BusinessLogicLayer
         }
 
 
-
+        /// <summary>
+        /// Converts a picter byte[] into a string
+        /// </summary>
+        /// <param name="byteArray"></param>
+        /// <returns></returns>
         public string ConvertByteArrayToString(byte[] byteArray)
         {
             if (byteArray != null)
@@ -113,6 +154,11 @@ namespace BusinessLogicLayer
 			else return null;
         }
 
+        /// <summary>
+        /// converts to an IformFile
+        /// </summary>
+        /// <param name="iformFile"></param>
+        /// <returns></returns>
         public byte[] ConvertIformFileToByteArray(IFormFile iformFile)
         {
             if (iformFile != null)
