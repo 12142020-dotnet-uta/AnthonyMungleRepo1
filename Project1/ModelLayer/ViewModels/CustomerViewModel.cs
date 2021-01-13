@@ -33,6 +33,7 @@ namespace ModelLayer.ViewModels
         [Display(Name = "Last Name")]
         public string Lname { get; set; }
 
+        [Display(Name = "Picture")]
         public string JpgString {get; set;}
         public IFormFile IformFileImage { get; set; }
 

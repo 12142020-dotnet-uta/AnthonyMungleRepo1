@@ -34,6 +34,9 @@ namespace RepositoryLayer.Migrations
                     b.Property<int>("amount")
                         .HasColumnType("int");
 
+                    b.Property<int>("location")
+                        .HasColumnType("int");
+
                     b.HasKey("CartId");
 
                     b.HasIndex("OwnerCustomerId");
@@ -125,6 +128,9 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");

@@ -134,5 +134,51 @@ namespace BusinessLogicLayer
             }
             return addToCartViewModel;
         }
+
+        public void AddToCart(AmountToAddViewModel amountToAddViewModel)
+        {
+            _repository.AddToCart(amountToAddViewModel);
+        }
+
+        public void SubtractFromInventory(int inventoryId, int amount)
+        {
+            _repository.SubtractFromInventory(inventoryId, amount);
+        }
+
+        public List<CartViewModel> cartViewModel(Guid customerGuid)
+        {
+             List<Cart> cartList = _repository.SearchCartList(customerGuid);
+            List<CartViewModel> cartViewModelList = new List<CartViewModel>();
+            foreach(Cart C in cartList)
+            {
+                cartViewModelList.Add(_mapper.ConvertToCartViewModel(C));
+            }
+            return cartViewModelList;
+          
+        }
+
+        public void OrderNow(Guid cartId)
+        {
+            _repository.OrderNow(cartId);
+        }
+
+        public void DeleteCartItem(Guid cartId)
+        {
+            _repository.DeleteCart(cartId);
+        }
+
+        public List<OrderViewModel> ViewOrderHistory(int LocationId, Guid CustomerId)
+        {
+            List<Order> order = _repository.SearchOrderList(LocationId);
+            List<OrderViewModel> orderViewModels = new List<OrderViewModel>();//_repository.ViewOrderHistory(LocationId, CustomerId);
+            foreach(Order O in order)
+            {
+
+                orderViewModels.Add(_mapper.ConvertToOrderViewModel(O));
+
+            }
+            return orderViewModels;
+        }
+
     }
 }

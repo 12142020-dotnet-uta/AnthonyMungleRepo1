@@ -9,12 +9,15 @@ namespace ModelLayer.ViewModels
 {
     public class InventoryViewModel
     {
-        public Guid CustomerId { get; set; }//Maybe neweGuid;
+        public Guid CustomerId { get; set; }
         public int InventoryId { get; set; }
 
         public int LocationId { get; set; }
+
+        [Display(Name = "")]
         public string ProductPicture { get; set; }
 
+        [Display(Name = "Product")]
         public string ProductName { get; set; }
 
         [Range(0, double.MaxValue)]

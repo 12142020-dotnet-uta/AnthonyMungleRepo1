@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RepositoryLayer.Migrations
 {
-    public partial class UnitMigrations : Migration
+    public partial class unitMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,7 +58,8 @@ namespace RepositoryLayer.Migrations
                     LocationId = table.Column<int>(type: "int", nullable: true),
                     ProductName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    Amount = table.Column<int>(type: "int", nullable: false)
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,6 +85,7 @@ namespace RepositoryLayer.Migrations
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     OwnerCustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    location = table.Column<int>(type: "int", nullable: false),
                     amount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

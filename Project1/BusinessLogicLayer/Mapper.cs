@@ -71,6 +71,35 @@ namespace BusinessLogicLayer
             return inventoryViewModel;
         }
 
+        public CartViewModel ConvertToCartViewModel(Cart cart)
+        {
+            CartViewModel cartViewModel = new CartViewModel()
+            {
+                customerGuid = cart.Owner.CustomerId,
+                locationsId = cart.location,
+                CartId = cart.CartId,
+                ProductName = cart.Product.ProductName,
+                total = cart.Product.Price * cart.amount              
+            };
+
+            return cartViewModel;
+        }
+
+        public OrderViewModel ConvertToOrderViewModel(Order order)
+        {
+            OrderViewModel orderViewModel = new OrderViewModel()
+            {
+                Amount = order.Amount,
+                Date = order.Date,
+                Price = order.Price,
+                OrderId = order.OrderId,
+                ProductName = order.ProductName
+            };
+
+            return orderViewModel;
+
+        }
+
 
 
         public string ConvertByteArrayToString(byte[] byteArray)

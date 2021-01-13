@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ModelLayer.ViewModels.LocationViewModel>
 
 @{
-    ViewData["Title"] = "LocationList";
+    ViewData["Title"] = "Locations";
 }
 
 <h1>LocationList</h1>
@@ -15,26 +15,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LocationId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.LocationName)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationId)
-            </td>
+            @Html.HiddenFor(modelItem => item.CustomerId)
+            @Html.HiddenFor(modelItem => item.LocationId)
             <td>
                 @Html.DisplayFor(modelItem => item.LocationName)
             </td>
             <td>
                 <!--Sends the locationID to whatever method on th controller-->
-                <a asp-controller="Customer" asp-action="InventoryList" asp-route-InventoryList="@item.LocationId" asp-route-customerGuid="@item.CustomerId" method="get">View Inventory</a>
+                <a asp-controller="Customer" asp-action="InventoryList" asp-route-InventoryList="@item.LocationId" asp-route-customerGuid="@item.CustomerId" method="get">View Inventory</a>|
+                <a asp-controller="Customer" asp-action="ViewOrders" asp-route-LocationId="@item.LocationId" asp-route-customerGuid="@item.CustomerId" method="get">View Order History</a>
             </td>
         </tr>
 }

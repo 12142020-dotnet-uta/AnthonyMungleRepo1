@@ -1,12 +1,11 @@
 ﻿@model ModelLayer.ViewModels.AmountToAddViewModel
 
 @{
-    ViewData["Title"] = "AddToCart";
+    ViewData["Title"] = "Add To Cart";
 }
 
 <h1>AddToCart</h1>
 
-@*<h4>AddToCartViewModel</h4>*@
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -35,22 +34,11 @@
             <div class="text-danger">
                 <p>@Html.ValidationMessage("Failure") </p>
             </div>
+           
             <input type="submit" value="Add To Cart" class="btn btn-primary" />
-            @*<a asp-controller="Customer" asp-action="InventoryList" asp-route-InventoryList="@Model.location" asp-route-customerGuid="@Model.CustomerId" method="get">Back to List</a>*@
-
         </div>
 
         </form>
-       @* @{ int count = Model.amount;
-            if (count >= Model.stock)
-            { 
-            
-            }
-            else
-            {
-                <h1>This is too much</h1>
-            }
-            }*@
         </div>
 </div>
 

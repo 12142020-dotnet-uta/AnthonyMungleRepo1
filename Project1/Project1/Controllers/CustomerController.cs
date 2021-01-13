@@ -9,49 +9,56 @@ using System.Threading.Tasks;
 
 namespace Project1.Controllers
 {
-    
+
     public class CustomerController : Controller
     {
 
         private BusinessLogicClass _businessLogicClass;
-         public CustomerController(BusinessLogicClass businessLogicClass)
-         {
+        public CustomerController(BusinessLogicClass businessLogicClass)
+        {
             this._businessLogicClass = businessLogicClass;
-         }
-
-
-
-        // GET: CustomerController
-        public ActionResult Index()
-        {
-            return View();
         }
 
-        // GET: CustomerController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-        // GET: CustomerController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: CustomerController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        /*  // GET: CustomerController
+          public ActionResult Index()
+          {
+              return View();
+          }
+
+          // GET: CustomerController/Details/5
+          public ActionResult Details(int id)
+          {
+              return View();
+          }
+
+          // GET: CustomerController/Create
+          public ActionResult Create()
+          {
+              return View();
+          }
+
+          // POST: CustomerController/Create
+          [HttpPost]
+          [ValidateAntiForgeryToken]
+          public ActionResult Create(IFormCollection collection)
+          {
+              try
+              {
+                  return RedirectToAction(nameof(Index));
+              }
+              catch
+              {
+                  return View();
+              }
+          }*/
+
+        public ActionResult ReturnToMain(Guid customerGuid)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            CustomerViewModel customerViewModel = _businessLogicClass.EditCustomer(customerGuid);
+            return View("DisplayCustomerDetails", customerViewModel);
+
         }
 
         // GET: CustomerController/Edit/5
@@ -65,10 +72,10 @@ namespace Project1.Controllers
 
         [HttpPost]
         [ActionName("EditedCustomer")]
-        public ActionResult EditCustomer(CustomerViewModel customerViewModel )
+        public ActionResult EditCustomer(CustomerViewModel customerViewModel)
         {
             CustomerViewModel customerViewModel1 = _businessLogicClass.EditedCustomer(customerViewModel);
-            return View("DisplayCustomerDetails", customerViewModel1 );
+            return View("DisplayCustomerDetails", customerViewModel1);
         }
 
         [ActionName("StartLocationMenu")]
@@ -77,8 +84,6 @@ namespace Project1.Controllers
             List<LocationViewModel> locationViewModelList = _businessLogicClass.LocationList(customerGuid);
             return View("LocationList", locationViewModelList);
         }
-
-
 
         [HttpGet]
         public IActionResult InventoryList(int InventoryList, Guid customerGuid)//passes guid up to here
@@ -96,16 +101,54 @@ namespace Project1.Controllers
 
         public IActionResult CanBeAdded(AmountToAddViewModel amountToAddView)
         {
-            if(amountToAddView.amount > amountToAddView.stock)
+            if (amountToAddView.amount > amountToAddView.stock)
             {
                 ModelState.AddModelError("Failure", "The amount you chose exceeded stock");
                 return View("AddToCart", amountToAddView);
             }
-            return View();
+
+            if (amountToAddView.amount != 0)
+            {
+                ModelState.AddModelError("Success", "Item(s) added to cart");
+                _businessLogicClass.AddToCart(amountToAddView);
+                _businessLogicClass.SubtractFromInventory(amountToAddView.inventory, amountToAddView.amount);
+            }
+            List<InventoryViewModel> inventoryViewModels = _businessLogicClass.SearchInventoryList(amountToAddView.location, amountToAddView.CustomerId);
+            return View("InventoryList", inventoryViewModels);
         }
 
+        public ActionResult ViewCart(Guid customerGuid)
+        {
+            List<CartViewModel> cartViewModelList = _businessLogicClass.cartViewModel(customerGuid);
+            return View("ViewCart", cartViewModelList);
+        }
 
-        // POST: CustomerController/Edit/5
+        public ActionResult DeleteCartItem(Guid CartId, Guid customerGuid)
+        {
+            _businessLogicClass.DeleteCartItem(CartId);
+            //List<CartViewModel> cartViewModelList = _businessLogicClass.cartViewModel(customerGuid);
+            ModelState.AddModelError("Delete", "your items have been Deleted");
+            CustomerViewModel customerViewModel = _businessLogicClass.EditCustomer(customerGuid);
+            return View("DisplayCustomerDetails", customerViewModel);
+        }
+
+        public ActionResult OrderNow(Guid cartId, Guid customerGuid)
+        {
+            _businessLogicClass.OrderNow(cartId);
+            ModelState.AddModelError("Order", "Your Order has been placed");
+            CustomerViewModel customerViewModel = _businessLogicClass.EditCustomer(customerGuid);
+            return View("DisplayCustomerDetails", customerViewModel);
+        }
+
+        public ActionResult ViewOrders(int LocationId, Guid CustomerId)
+        {
+
+            List<OrderViewModel> orderViewModel = _businessLogicClass.ViewOrderHistory(LocationId, CustomerId);
+
+            return View("ViewOrders", orderViewModel);
+        }
+
+       /* // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -139,6 +182,6 @@ namespace Project1.Controllers
             {
                 return View();
             }
-        }
+        }*/
     }
 }

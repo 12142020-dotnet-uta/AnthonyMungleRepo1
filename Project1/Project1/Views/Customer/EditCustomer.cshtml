@@ -8,6 +8,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <br />
+        <img class="img-responsive" src="@Model.JpgString" alt="No Image Found" style="height:100px" />
         <form asp-action="EditedCustomer" enctype="multipart/form-data" method="post">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -15,17 +17,13 @@
                 <strong><label asp-for="CustomerId" class="control-label"></label></strong><br />
                 @Html.HiddenFor(model => model.CustomerId)
                 @Html.DisplayFor(model => model.CustomerId)
-                @*
-        <input asp-for="CustomerId" class="form-control" />
-        <span asp-validation-for="CustomerId" class="text-danger"></span>*@
+
             </div>
             <div class="form-group">
                 <strong><label asp-for="Uname" class="control-label"></label></strong><br />
                 @Html.HiddenFor(model => model.Uname)
                 @Html.DisplayFor(model => model.Uname)
-                @*
-                <input asp-for="Uname" class="form-control" />
-                <span asp-validation-for="Uname" class="text-danger"></span>*@
+
             </div>
             <div class="form-group">
                 <strong><label asp-for="Fname" class="control-label"></label></strong>
@@ -44,16 +42,13 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="button" value="Back" class="btn btn-primary" onclick="history.back()">
             </div>
         </form>
-        <br />
-        <img class="img-responsive" src="@Model.JpgString" alt="No Image Found" style="height:100px" />
+
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

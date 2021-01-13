@@ -10,8 +10,8 @@ using RepositoryLayer;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20210108204533_UnitMigrations")]
-    partial class UnitMigrations
+    [Migration("20210113071041_unitMigration")]
+    partial class unitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,9 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("location")
                         .HasColumnType("int");
 
                     b.HasKey("CartId");
@@ -127,6 +130,9 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("LocationId")
                         .HasColumnType("int");
