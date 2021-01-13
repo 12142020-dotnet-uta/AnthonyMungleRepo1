@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 namespace Project1.Controllers
 {
 
+    /// <summary>
+    /// Main Controller for customer and stores
+    /// </summary>
     public class CustomerController : Controller
     {
 
@@ -54,6 +57,11 @@ namespace Project1.Controllers
               }
           }*/
 
+        /// <summary>
+        /// Returns the user to main Display
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public ActionResult ReturnToMain(Guid customerGuid)
         {
             CustomerViewModel customerViewModel = _businessLogicClass.EditCustomer(customerGuid);
@@ -61,6 +69,11 @@ namespace Project1.Controllers
 
         }
 
+        /// <summary>
+        /// Edits customersViewModel from a user GUID
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         // GET: CustomerController/Edit/5
         [Route("{customerGuid}")]
         public ActionResult EditCustomer(Guid customerGuid)
@@ -70,6 +83,12 @@ namespace Project1.Controllers
             return View(customerViewModel);
         }
 
+        /// <summary>
+        /// Allows the editView to actually edit a CustomerViewModel
+        /// then returns the DisplayUserVIew
+        /// </summary>
+        /// <param name="customerViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         [ActionName("EditedCustomer")]
         public ActionResult EditCustomer(CustomerViewModel customerViewModel)
@@ -78,6 +97,11 @@ namespace Project1.Controllers
             return View("DisplayCustomerDetails", customerViewModel1);
         }
 
+        /// <summary>
+        /// Retrieves the locationList view
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         [ActionName("StartLocationMenu")]
         public IActionResult LocationList(Guid customerGuid)
         {
@@ -85,6 +109,12 @@ namespace Project1.Controllers
             return View("LocationList", locationViewModelList);
         }
 
+        /// <summary>
+        /// Retrieves the InventoryList view
+        /// </summary>
+        /// <param name="InventoryList"></param>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult InventoryList(int InventoryList, Guid customerGuid)//passes guid up to here
         {
@@ -92,6 +122,15 @@ namespace Project1.Controllers
             return View("InventoryList", inventoryViewModels);
         }
 
+        /// <summary>
+        /// Brings up the AddToCartView which is the
+        /// Details for Products
+        /// </summary>
+        /// <param name="LocationId"></param>
+        /// <param name="InventoryId"></param>
+        /// <param name="productName"></param>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult AddingToCart(int LocationId, int InventoryId, string productName, Guid customerGuid)//Gets all the necessary values from here
         {
@@ -99,6 +138,12 @@ namespace Project1.Controllers
             return View("AddToCart", amountToAddViewModel);
         }
 
+        /// <summary>
+        /// Checks to see if the user has selected enough or too many products
+        /// from the list of available stock
+        /// </summary>
+        /// <param name="amountToAddView"></param>
+        /// <returns></returns>
         public IActionResult CanBeAdded(AmountToAddViewModel amountToAddView)
         {
             if (amountToAddView.amount > amountToAddView.stock)
@@ -117,12 +162,23 @@ namespace Project1.Controllers
             return View("InventoryList", inventoryViewModels);
         }
 
+        /// <summary>
+        /// Brings up the cart view
+        /// </summary>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public ActionResult ViewCart(Guid customerGuid)
         {
             List<CartViewModel> cartViewModelList = _businessLogicClass.cartViewModel(customerGuid);
             return View("ViewCart", cartViewModelList);
         }
 
+        /// <summary>
+        /// Deletes the selected cart then brings up the displayCustomerDetails view
+        /// </summary>
+        /// <param name="CartId"></param>
+        /// <param name="customerGuid"></param>
+        /// <returns></returns>
         public ActionResult DeleteCartItem(Guid CartId, Guid customerGuid)
         {
             _businessLogicClass.DeleteCartItem(CartId);

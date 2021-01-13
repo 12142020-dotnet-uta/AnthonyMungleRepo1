@@ -140,7 +140,7 @@ namespace RepositoryLayer
             if (cart != null)
             {
                 cartSet.Remove(cart);
-            //    inventorySet.Add(invent); cannot Update This in the database Entity Framework wont allow
+           //  inventorySet.Add(invent); //cannot Update This in the database Entity Framework wont allow
                _dbcontext.SaveChanges();
             }
         }
