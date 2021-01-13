@@ -5,7 +5,7 @@
 }
 
 <div>
-    <h4>Customer</h4>
+    <h4>Customer Home</h4>
     <hr />
         <p>@Html.ValidationMessage("Delete") </p>
         <p>@Html.ValidationMessage("Order") </p>
@@ -48,5 +48,5 @@
     <a class="btn btn-primary" asp-controller="Customer" asp-action="EditCustomer" asp-route-customerGuid="@Model.CustomerId">Edit Customer</a>
     
     <a class="btn btn-dark" asp-controller="Customer" asp-action="StartLocationMenu" asp-route-customerGuid="@Model.CustomerId">Start Shopping</a><!--Might need customerID LAter-->
-    <a asp-controller="Customer" asp-action="ViewCart" asp-route-customerGuid="@Model.CustomerId">View Cart</a>
+    <a class="btn btn-primary" asp-controller="Customer" asp-action="ViewCart" asp-route-customerGuid="@Model.CustomerId">View Cart</a>
     </div>
